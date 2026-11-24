@@ -1,7 +1,7 @@
-# PetTheCat — App Store listing (draft)
+# Pocket Purr — App Store listing (draft)
 
 ## Name (max 30)
-PetTheCat
+Pocket Purr
 
 ## Subtitle (max 30)
 Pet a cat. Feel it purr.
@@ -11,12 +11,12 @@ Pet a cat. Feel it purr.
 A tiny, calming cat to pet whenever you need a break. Stroke the right spot and hear and feel the purr build.
 
 ## Keywords (max 100 characters, comma-separated, no spaces after commas)
-cat,kitten,pet,purr,purring,relax,calm,cute,haptic,widget,stress,sound,animal,pets,cats,chill
+cat,kitten,pet,purring,relax,calm,cute,haptic,widget,stress,sound,animal,pets,cats,chill
 
 ## Description (max 4000)
 Need a quiet moment? Pet the cat.
 
-PetTheCat is a small, calming app with one simple idea: a cat on your screen that you can stroke with your finger. Slide your finger over the fur and it ruffles and settles back. Find the spot your cat likes and the purr starts soft, then grows the longer you keep petting. Let go, and it slowly fades away.
+Pocket Purr is a small, calming app with one simple idea: a cat on your screen that you can stroke with your finger. Slide your finger over the fur and it ruffles and settles back. Find the spot your cat likes and the purr starts soft, then grows the longer you keep petting. Let go, and it slowly fades away.
 
 EVERY SPOT IS DIFFERENT
 • Chin and cheeks: pure bliss
@@ -35,7 +35,7 @@ A CAT ON YOUR HOME SCREEN
 Add the widget, choose a cat, and tap it right on your Home Screen to make it purr — without even opening the app.
 
 PRIVATE BY DESIGN
-No accounts, no ads, no tracking, and no internet connection needed. PetTheCat collects nothing about you.
+No accounts, no ads, no tracking, and no internet connection needed. Pocket Purr collects nothing about you.
 
 Take a breath. Pet the cat.
 
@@ -60,4 +60,4 @@ Tracking: No
 First release. Say hello to your cat.
 
 ## Review notes (optional)
-No login required. Pet the cat by dragging a finger over it. Sound and haptics play while petting. Widget: long-press Home Screen → + → PetTheCat.
+No login required. Pet the cat by dragging a finger over it. Sound and haptics play while petting. Widget: long-press Home Screen → + → Pocket Purr.
