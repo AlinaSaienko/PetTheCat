@@ -3,8 +3,12 @@ import CoreHaptics
 
 /// Муркотіння: синтезований звук + вібрація. level: 0...1
 final class Purr {
+    /// One shared instance: SwiftUI can re-create a view's @State default many times,
+    /// and several audio/haptic engines at once fight over the hardware.
+    static let shared = Purr()
+
     private let engine = AVAudioEngine()
-    private let haptics = HapticPurr()
+    private let haptics: HapticPurr
     fileprivate var level: Float = 0
     fileprivate var pitch: Float = 110
     fileprivate var rate: Float = 24
@@ -14,9 +18,11 @@ final class Purr {
         let session = AVAudioSession.sharedInstance()
         // .playback грає і при вимкненому дзвінку (беззвучний перемикач), .ambient — ні
         try? session.setCategory(.playback, mode: .default, options: [.mixWithOthers])
-        try? session.setActive(true)
+        haptics = HapticPurr()
 
-        let sampleRate = engine.outputNode.outputFormat(forBus: 0).sampleRate
+        // Fixed rate: the mixer converts to the hardware rate, and we don't have to
+        // query the output format before the session is active.
+        let sampleRate: Double = 44100
         let rate = Float(sampleRate)
         let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)!
 
@@ -47,7 +53,7 @@ final class Purr {
         }
         engine.attach(node)
         engine.connect(node, to: engine.mainMixerNode, format: format)
-        try? engine.start()
+        restart()   // activates the session and starts the engine off the main thread
 
         NotificationCenter.default.addObserver(forName: AVAudioSession.interruptionNotification,
                                                object: nil, queue: .main) { [weak self] note in
@@ -61,9 +67,17 @@ final class Purr {
         }
     }
 
+    private var restarting = false   // main thread only
+
+    /// Activating the audio session can block, so it never runs on the main thread.
     private func restart() {
-        try? AVAudioSession.sharedInstance().setActive(true)
-        if !engine.isRunning { try? engine.start() }
+        guard !restarting else { return }
+        restarting = true
+        DispatchQueue.global(qos: .userInitiated).async { [engine] in
+            try? AVAudioSession.sharedInstance().setActive(true)
+            if !engine.isRunning { try? engine.start() }
+            DispatchQueue.main.async { [weak self] in self?.restarting = false }
+        }
     }
 
     func update(level value: Float, pitch: Float, rate: Float, rough: Float) {
@@ -85,20 +99,45 @@ final class HapticPurr {
     private var engine: CHHapticEngine?
     private var player: CHHapticAdvancedPatternPlayer?
     private var running = false
+    private var needsRebuild = false
+    private var lastSent: Float = -1
+    private var lastRebuild = Date.distantPast
+    private let supported = CHHapticEngine.capabilitiesForHardware().supportsHaptics
 
-    init() {
-        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+    init() { prepare() }
+
+    private func prepare() {
+        guard supported else { return }
         do {
             let e = try CHHapticEngine()
             e.isAutoShutdownEnabled = false
+            // Called on a private queue: hop to main before touching our state.
+            e.stoppedHandler = { [weak self] _ in
+                DispatchQueue.main.async { self?.running = false; self?.needsRebuild = true }
+            }
             e.resetHandler = { [weak self] in
-                try? self?.engine?.start()
-                self?.makePlayer()
+                DispatchQueue.main.async { self?.running = false; self?.needsRebuild = true }
             }
             try e.start()
             engine = e
             makePlayer()
-        } catch {}
+        } catch {
+            engine = nil
+            player = nil
+        }
+    }
+
+    private func rebuild() {
+        guard Date().timeIntervalSince(lastRebuild) > 0.5 else { return }   // no rebuild storms
+        lastRebuild = Date()
+        needsRebuild = false
+        try? player?.stop(atTime: CHHapticTimeImmediate)
+        player = nil
+        engine?.stop()
+        engine = nil
+        running = false
+        lastSent = -1
+        prepare()
     }
 
     private func makePlayer() {
@@ -119,24 +158,36 @@ final class HapticPurr {
             p?.loopEnabled = true
             player = p
             running = false
-        } catch {}
+        } catch {
+            player = nil
+        }
     }
 
     func setLevel(_ value: Float) {
-        guard let player else { return }
+        guard supported else { return }
         if value > 0.04 {
+            if engine == nil || player == nil || needsRebuild { rebuild() }
+            guard let player else { return }
             do {
                 if !running {
                     try player.start(atTime: CHHapticTimeImmediate)
                     running = true
+                    lastSent = -1
                 }
-                let dp = CHHapticDynamicParameter(parameterID: .hapticIntensityControl,
-                                                  value: min(1, 0.25 + value),
-                                                  relativeTime: 0)
-                try player.sendParameters([dp], atTime: CHHapticTimeImmediate)
-            } catch {}
+                let v = min(1, 0.25 + value)
+                if abs(v - lastSent) > 0.02 {
+                    let dp = CHHapticDynamicParameter(parameterID: .hapticIntensityControl,
+                                                      value: v,
+                                                      relativeTime: 0)
+                    try player.sendParameters([dp], atTime: CHHapticTimeImmediate)
+                    lastSent = v
+                }
+            } catch {
+                running = false
+                needsRebuild = true
+            }
         } else if running {
-            try? player.stop(atTime: CHHapticTimeImmediate)
+            try? player?.stop(atTime: CHHapticTimeImmediate)
             running = false
         }
     }

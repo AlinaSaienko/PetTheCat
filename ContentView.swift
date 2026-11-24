@@ -19,7 +19,7 @@ struct ContentView: View {
     @State private var pitch: Float = 100
     @State private var rate: Float = 24
     @State private var rough: Float = 0.2
-    @State private var purr = Purr()
+    private let purr = Purr.shared
     @State private var words: [ComicWord] = []
     @State private var wordTimer: Double = 0
     @AppStorage("breedIndex") private var breedIndex = 0
