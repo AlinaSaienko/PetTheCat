@@ -7,22 +7,69 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A10000000000000000000001 /* PetTheCatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* PetTheCatApp.swift */; };
-		A10000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* ContentView.swift */; };
-		A10000000000000000000003 /* FurField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* FurField.swift */; };
-		A10000000000000000000004 /* Purr.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004 /* Purr.swift */; };
+		29A1272530B4E49600AB09A3 /* PetTheCatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A1272330B4E49600AB09A3 /* PetTheCatApp.swift */; };
+		29A1272630B4E49600AB09A3 /* FurField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A1272230B4E49600AB09A3 /* FurField.swift */; };
+		29A1272730B4E49600AB09A3 /* Purr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A1272430B4E49600AB09A3 /* Purr.swift */; };
+		29A1272830B4E49600AB09A3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A1272130B4E49600AB09A3 /* ContentView.swift */; };
+		A10000000000000000000A01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000A02 /* Assets.xcassets */; };
+		B2000000000000000000B001 /* CatArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000F001 /* CatArt.swift */; };
+		B2000000000000000000B002 /* CatArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000F001 /* CatArt.swift */; };
+		B2000000000000000000B003 /* PetTheCatWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000F002 /* PetTheCatWidget.swift */; };
+		B2000000000000000000B004 /* PetCatIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000000000000000000F003 /* PetCatIntents.swift */; };
+		B2000000000000000000B005 /* PetTheCatWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B1000000000000000000F005 /* PetTheCatWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C1000000000000000000C001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C2000000000000000000C001 /* PrivacyInfo.xcprivacy */; };
+		C1000000000000000000C002 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C2000000000000000000C002 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B50000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A70000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B60000000000000000000001;
+			remoteInfo = PetTheCatWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B40000000000000000000004 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				B2000000000000000000B005 /* PetTheCatWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		A20000000000000000000001 /* PetTheCatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetTheCatApp.swift; sourceTree = "<group>"; };
-		A20000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		A20000000000000000000003 /* FurField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurField.swift; sourceTree = "<group>"; };
-		A20000000000000000000004 /* Purr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purr.swift; sourceTree = "<group>"; };
+		29A1272130B4E49600AB09A3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		29A1272230B4E49600AB09A3 /* FurField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurField.swift; sourceTree = "<group>"; };
+		29A1272330B4E49600AB09A3 /* PetTheCatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetTheCatApp.swift; sourceTree = "<group>"; };
+		29A1272430B4E49600AB09A3 /* Purr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purr.swift; sourceTree = "<group>"; };
 		A20000000000000000000005 /* PetTheCat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PetTheCat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000A02 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B1000000000000000000F001 /* CatArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatArt.swift; sourceTree = "<group>"; };
+		B1000000000000000000F002 /* PetTheCatWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetTheCatWidget.swift; sourceTree = "<group>"; };
+		B1000000000000000000F003 /* PetCatIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetCatIntents.swift; sourceTree = "<group>"; };
+		B1000000000000000000F004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B1000000000000000000F005 /* PetTheCatWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PetTheCatWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2000000000000000000C001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		C2000000000000000000C002 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A30000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B40000000000000000000002 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -35,10 +82,14 @@
 		A40000000000000000000001 = {
 			isa = PBXGroup;
 			children = (
-				A20000000000000000000001 /* PetTheCatApp.swift */,
-				A20000000000000000000002 /* ContentView.swift */,
-				A20000000000000000000003 /* FurField.swift */,
-				A20000000000000000000004 /* Purr.swift */,
+				B1000000000000000000F001 /* CatArt.swift */,
+				29A1272130B4E49600AB09A3 /* ContentView.swift */,
+				29A1272230B4E49600AB09A3 /* FurField.swift */,
+				29A1272330B4E49600AB09A3 /* PetTheCatApp.swift */,
+				29A1272430B4E49600AB09A3 /* Purr.swift */,
+				A10000000000000000000A02 /* Assets.xcassets */,
+				C2000000000000000000C001 /* PrivacyInfo.xcprivacy */,
+				B30000000000000000000001 /* PetTheCatWidget */,
 				A40000000000000000000002 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,8 +98,20 @@
 			isa = PBXGroup;
 			children = (
 				A20000000000000000000005 /* PetTheCat.app */,
+				B1000000000000000000F005 /* PetTheCatWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B30000000000000000000001 /* PetTheCatWidget */ = {
+			isa = PBXGroup;
+			children = (
+				B1000000000000000000F002 /* PetTheCatWidget.swift */,
+				B1000000000000000000F003 /* PetCatIntents.swift */,
+				B1000000000000000000F004 /* Info.plist */,
+				C2000000000000000000C002 /* PrivacyInfo.xcprivacy */,
+			);
+			path = PetTheCatWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -61,15 +124,34 @@
 				A60000000000000000000001 /* Sources */,
 				A30000000000000000000001 /* Frameworks */,
 				A60000000000000000000002 /* Resources */,
+				B40000000000000000000004 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				B50000000000000000000002 /* PBXTargetDependency */,
 			);
 			name = PetTheCat;
 			productName = PetTheCat;
 			productReference = A20000000000000000000005 /* PetTheCat.app */;
 			productType = "com.apple.product-type.application";
+		};
+		B60000000000000000000001 /* PetTheCatWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B70000000000000000000001 /* Build configuration list for PBXNativeTarget "PetTheCatWidgetExtension" */;
+			buildPhases = (
+				B40000000000000000000001 /* Sources */,
+				B40000000000000000000002 /* Frameworks */,
+				B40000000000000000000003 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PetTheCatWidgetExtension;
+			productName = PetTheCatWidgetExtension;
+			productReference = B1000000000000000000F005 /* PetTheCatWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -80,6 +162,14 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A50000000000000000000001 = {
+						LastSwiftMigration = 2700;
+					};
+					B60000000000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
 			};
 			buildConfigurationList = A80000000000000000000001 /* Build configuration list for PBXProject "PetTheCat" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -95,6 +185,7 @@
 			projectRoot = "";
 			targets = (
 				A50000000000000000000001 /* PetTheCat */,
+				B60000000000000000000001 /* PetTheCatWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -104,20 +195,49 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10000000000000000000A01 /* Assets.xcassets in Resources */,
+				C1000000000000000000C001 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B40000000000000000000003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1000000000000000000C002 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B50000000000000000000002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B60000000000000000000001 /* PetTheCatWidgetExtension */;
+			targetProxy = B50000000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A60000000000000000000001 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10000000000000000000001 /* PetTheCatApp.swift in Sources */,
-				A10000000000000000000002 /* ContentView.swift in Sources */,
-				A10000000000000000000003 /* FurField.swift in Sources */,
-				A10000000000000000000004 /* Purr.swift in Sources */,
+				29A1272530B4E49600AB09A3 /* PetTheCatApp.swift in Sources */,
+				B2000000000000000000B001 /* CatArt.swift in Sources */,
+				29A1272630B4E49600AB09A3 /* FurField.swift in Sources */,
+				29A1272730B4E49600AB09A3 /* Purr.swift in Sources */,
+				29A1272830B4E49600AB09A3 /* ContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B40000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2000000000000000000B002 /* CatArt.swift in Sources */,
+				B2000000000000000000B003 /* PetTheCatWidget.swift in Sources */,
+				B2000000000000000000B004 /* PetCatIntents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,9 +289,41 @@
 		A90000000000000000000003 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alinasaienko.PetTheCat;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		A90000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
@@ -187,24 +339,60 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Debug;
+			name = Release;
 		};
-		A90000000000000000000004 /* Release */ = {
+		B80000000000000000000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = PetTheCatWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pet the Cat";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.alinasaienko.PetTheCat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alinasaienko.PetTheCat.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		B80000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = PetTheCatWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pet the Cat";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alinasaienko.PetTheCat.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -229,6 +417,15 @@
 			buildConfigurations = (
 				A90000000000000000000003 /* Debug */,
 				A90000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B70000000000000000000001 /* Build configuration list for PBXNativeTarget "PetTheCatWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B80000000000000000000001 /* Debug */,
+				B80000000000000000000002 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
