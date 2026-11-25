@@ -53,6 +53,48 @@ final class BoxRollerTests: XCTestCase {
         }
     }
 
+    func testNextWeightsAfterABasicCat() {
+        let w = Dictionary(uniqueKeysWithValues: series.nextWeights(after: "elf").map { ($0.id, $0.weight) })
+        XCTAssertEqual(w.values.reduce(0, +), 1440)
+        XCTAssertEqual(w["elf"], 0)
+        XCTAssertEqual(w["midnight"], 20, "secret stays 1 in 72")
+        for id in series.basics where id != "elf" { XCTAssertEqual(w[id], 355) }
+        XCTAssertEqual(series.afterRepeatPercent, "24.65%")
+    }
+
+    func testNextWeightsAfterTheSecretCat() {
+        let w = Dictionary(uniqueKeysWithValues: series.nextWeights(after: "midnight").map { ($0.id, $0.weight) })
+        XCTAssertEqual(w.values.reduce(0, +), 1440)
+        XCTAssertEqual(w["midnight"], 0)
+        for id in series.basics { XCTAssertEqual(w[id], 288) }
+    }
+
+    func testNoWeightChangeWithoutAPreviousCat() {
+        let w = Dictionary(uniqueKeysWithValues: series.nextWeights(after: nil).map { ($0.id, $0.weight) })
+        XCTAssertEqual(w["midnight"], 20)
+        XCTAssertEqual(w["gingerbread"], 284)           // 71/360 = 284/1440
+    }
+
+    /// 200k chained boxes: never the same cat twice in a row, secret still 1 in 72,
+    /// and over a long run each basic cat still comes up about equally often.
+    func testNeverTheSameCatTwiceInARow() {
+        var rng = SeededGenerator(seed: 7)
+        let n = 200_000
+        var last: String?
+        var counts: [String: Int] = [:]
+        for _ in 0..<n {
+            let id = BoxRoller.roll(series, after: last, using: &rng)
+            XCTAssertNotEqual(id, last)
+            counts[id, default: 0] += 1
+            last = id
+        }
+        let secretShare = Double(counts["midnight"] ?? 0) / Double(n) * 100
+        XCTAssertEqual(secretShare, 100.0 / 72, accuracy: 0.1)
+        for id in series.basics {
+            XCTAssertEqual(Double(counts[id] ?? 0) / Double(n) * 100, (100 - 100.0 / 72) / 5, accuracy: 0.3, id)
+        }
+    }
+
     func testSameSeedGivesSameRolls() {
         var a = SeededGenerator(seed: 42), b = SeededGenerator(seed: 42)
         let first = (0..<50).map { _ in BoxRoller.roll(series, using: &a) }
@@ -194,6 +236,7 @@ final class CollectionRulesTests: XCTestCase {
         XCTAssertEqual(d.unopened, before)              // one spent, one bonus
         XCTAssertEqual(d.count("elf"), 3)
         XCTAssertEqual(d.opened, 5)
+        XCTAssertEqual(d.lastOpened, "frost")
     }
 
     func testClassicCatsAreAlwaysOwned() {

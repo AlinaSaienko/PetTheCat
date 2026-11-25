@@ -302,7 +302,7 @@ struct BoxOpeningView: View {
             .accessibilityHidden(true)
 
             Spacer()
-            Text("Odds: each basic cat \(store.series.percent(store.series.basics[0])) · secret 1 in 72")
+            Text("Odds: each basic cat \(store.series.percent(store.series.basics[0])) · secret 1 in 72 · no repeats in a row")
                 .font(.system(size: 13))
                 .foregroundColor(Color(hex: 0xBFB3CC))
                 .padding(.bottom, 24)
@@ -496,10 +496,13 @@ struct OddsSheet: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Free boxes").font(.system(size: 15, weight: .heavy))
                 ForEach(["1 welcome box with the update", "1 box a day, Dec 1 – Jan 6",
-                         "Unopened boxes stack up to 3", "Every 3 duplicates = 1 bonus box"], id: \.self) { rule in
+                         "Unopened boxes stack up to 3", "Every 3 duplicates = 1 bonus box",
+                         "Never the same cat twice in a row: right after a basic cat, the other 4 are \(s.afterRepeatPercent) each and the secret cat stays 1.39%"],
+                        id: \.self) { rule in
                     HStack(spacing: 10) {
                         Circle().fill(Palette.red).frame(width: 8, height: 8).accessibilityHidden(true)
                         Text(rule).font(.system(size: 14)).foregroundColor(Color(hex: 0x3B3341))
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }

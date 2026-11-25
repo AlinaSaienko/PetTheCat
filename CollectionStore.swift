@@ -18,18 +18,22 @@ struct SeededGenerator: RandomNumberGenerator {
 
 enum BoxRoller {
     /// Each basic cat 71/360 (19.72%), the secret cat 5/360 (1 in 72).
-    static func roll<G: RandomNumberGenerator>(_ series: Series, using rng: inout G) -> String {
-        var x = Int.random(in: 0..<series.totalWeight, using: &rng)
-        for id in series.designs {
-            x -= series.weight(id)
+    /// With `after`, that cat is left out and its share goes to the other basic cats.
+    static func roll<G: RandomNumberGenerator>(_ series: Series, after last: String? = nil, using rng: inout G) -> String {
+        let weights = series.nextWeights(after: last)
+        let total = weights.reduce(0) { $0 + $1.weight }
+        var x = Int.random(in: 0..<total, using: &rng)
+        for (id, w) in weights {
+            x -= w
             if x < 0 { return id }
         }
-        return series.designs[series.designs.count - 1]
+        return weights.last { $0.weight > 0 }?.id ?? series.designs[0]
     }
 
-    static func roll(_ series: Series) -> String {
+    /// Uses the system's secure random generator (seeded by iOS; tap timing has no influence).
+    static func roll(_ series: Series, after last: String? = nil) -> String {
         var rng = SystemRandomNumberGenerator()
-        return roll(series, using: &rng)
+        return roll(series, after: last, using: &rng)
     }
 }
 
@@ -118,6 +122,7 @@ extension CollectionData {
     mutating func recordOpened(_ id: String) -> OpenedBox {
         unopened = max(0, unopened - 1)
         opened += 1
+        lastOpened = id
         let n = (owned[id] ?? 0) + 1
         owned[id] = n
         var bonus = false
@@ -210,7 +215,7 @@ final class CollectionStore: ObservableObject {
     /// Opens one box: rolls, records the cat and handles duplicates (every 3rd one gives a bonus box).
     func openBox(forcing forced: String? = nil) -> Opened? {
         guard data.unopened > 0 else { return nil }
-        let id = forced ?? BoxRoller.roll(series)
+        let id = forced ?? BoxRoller.roll(series, after: data.lastOpened)
         var d = data
         let result = d.recordOpened(id)
         update(d)

@@ -26,6 +26,31 @@ struct Series {
     func percent(_ id: String) -> String {
         String(format: "%.2f%%", Double(weight(id)) / Double(totalWeight) * 100)
     }
+
+    /// Weights for the next box, out of 1440 (= 4 × 360), when `last` was the previous cat:
+    /// that cat can't come twice in a row; the secret cat keeps exactly 1 in 72 (20/1440)
+    /// unless it was the previous cat itself, and the basic cats share the rest equally.
+    func nextWeights(after last: String?) -> [(id: String, weight: Int)] {
+        let scale = 4
+        guard let last, designs.contains(last) else {
+            return designs.map { ($0, weight($0) * scale) }
+        }
+        let total = totalWeight * scale
+        if last == secret {
+            let each = total / basics.count                          // 288 each
+            return designs.map { ($0, $0 == secret ? 0 : each) }
+        }
+        let secretWeight = secret.map { weight($0) * scale } ?? 0   // 20
+        let each = (total - secretWeight) / (basics.count - 1)       // 355 each
+        return designs.map { ($0, $0 == last ? 0 : $0 == secret ? secretWeight : each) }
+    }
+
+    /// share of the other basic cats right after you got a basic cat ("24.65%")
+    var afterRepeatPercent: String {
+        let w = nextWeights(after: basics.first)
+        let total = w.reduce(0) { $0 + $1.weight }
+        return String(format: "%.2f%%", Double(w[1].weight) / Double(total) * 100)
+    }
 }
 
 enum Catalog {
@@ -80,6 +105,8 @@ struct CollectionData: Codable, Equatable {
     var seen: [String] = []
     var lastPopupDay: String?
     var opened = 0
+    /// the cat from the last box (never the same one twice in a row)
+    var lastOpened: String?
 
     func count(_ id: String) -> Int { Catalog.isClassic(id) ? 1 : (owned[id] ?? 0) }
     func isOwned(_ id: String) -> Bool { count(id) > 0 }
