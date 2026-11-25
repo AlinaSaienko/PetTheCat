@@ -366,33 +366,33 @@ struct BoxOpeningView: View {
             }
             VStack(spacing: 0) {
                 Text(r.isDuplicate ? "Duplicate ×\(r.count)" : secret ? "Secret cat!" : "New cat!")
-                    .font(.system(size: 14, weight: .heavy))
+                    .font(.system(size: 18, weight: .heavy))
                     .kerning(0.4)
-                    .padding(.horizontal, 14).padding(.vertical, 6)
+                    .padding(.horizontal, 18).padding(.vertical, 8)
                     .background(Capsule().fill(secret ? Palette.gold : Palette.red))
                     .foregroundColor(secret ? Palette.night : .white)
-                    .padding(.top, 60)
+                    .padding(.top, 44)
                 if let b = Catalog.breed(r.id) {
-                    CatThumb(breed: b, side: 280)
+                    CatThumb(breed: b, side: UIScreen.main.bounds.height < 700 ? 260 : 350)   // smaller on iPhone SE
                         .scaleEffect(pop)
                         .opacity(Double(min(1, pop * 1.6)))
-                        .padding(.top, 30)
+                        .padding(.top, 16)
                 }
                 Text(name)
-                    .font(.system(size: 42, weight: .heavy))
+                    .font(.system(size: 54, weight: .heavy))
                     .foregroundColor(ink)
-                    .padding(.top, 26)
+                    .padding(.top, 14)
                     .accessibilityAddTraits(.isHeader)
                 Text(secret ? "Secret · 1 in 72 · Christmas Series" : "Basic · Christmas Series")
-                    .font(.system(size: 16, weight: .bold))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundColor(muted)
                     .padding(.top, 6)
                 Text(r.bonusEarned ? "3 duplicates — bonus box earned! 🎁"
                      : r.isDuplicate ? "Bonus box: \(r.duplicateProgress) of 3 duplicates"
                      : "Added to My cats")
-                    .font(.system(size: 14))
+                    .font(.system(size: 17))
                     .foregroundColor(muted)
-                    .padding(.top, 4)
+                    .padding(.top, 6)
                 Spacer()
                 VStack(spacing: 10) {
                     Button { onPet(r.id) } label: {
@@ -519,6 +519,8 @@ struct OddsSheet: View {
         .foregroundColor(Palette.ink)
         .padding(.horizontal, 20)
         .padding(.bottom, 12)
+        .background(Color.white.ignoresSafeArea())
+        .environment(\.colorScheme, .light)
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
     }
