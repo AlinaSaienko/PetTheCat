@@ -8,6 +8,11 @@ final class Purr {
     static let shared = Purr()
 
     private let engine = AVAudioEngine()
+
+    /// one-shot sounds: bell jingle, reveal chimes, box taps
+    enum Effect { case jingle, chime, secretChime, tap }
+    private let fxPlayer = AVAudioPlayerNode()
+    private var fxBuffers: [Effect: AVAudioPCMBuffer] = [:]
     private let haptics: HapticPurr
     fileprivate var level: Float = 0
     fileprivate var pitch: Float = 110
@@ -53,6 +58,9 @@ final class Purr {
         }
         engine.attach(node)
         engine.connect(node, to: engine.mainMixerNode, format: format)
+        engine.attach(fxPlayer)
+        engine.connect(fxPlayer, to: engine.mainMixerNode, format: format)
+        fxBuffers = Purr.makeEffects(format: format)
         restart()   // activates the session and starts the engine off the main thread
 
         NotificationCenter.default.addObserver(forName: AVAudioSession.interruptionNotification,
@@ -85,6 +93,51 @@ final class Purr {
         self.rate = rate
         self.rough = rough
         setLevel(value)
+    }
+
+    func play(_ effect: Effect) {
+        guard let buffer = fxBuffers[effect] else { return }
+        guard engine.isRunning else { restart(); return }
+        fxPlayer.scheduleBuffer(buffer, at: nil, options: [], completionHandler: nil)
+        if !fxPlayer.isPlaying { fxPlayer.play() }
+    }
+
+    func tapHaptic(_ strength: Float) { haptics.transient(intensity: min(1, strength), sharpness: 0.5) }
+    func revealHaptic(secret: Bool) { haptics.reveal(secret: secret) }
+
+    /// Small synthesized bells, rendered once at start-up.
+    private static func makeEffects(format: AVAudioFormat) -> [Effect: AVAudioPCMBuffer] {
+        let sr = Float(format.sampleRate)
+        func buffer(_ seconds: Float, _ f: (Float) -> Float) -> AVAudioPCMBuffer? {
+            let n = AVAudioFrameCount(seconds * sr)
+            guard let b = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: n), let ch = b.floatChannelData else { return nil }
+            b.frameLength = n
+            for i in 0..<Int(n) { ch[0][i] = f(Float(i) / sr) }
+            return b
+        }
+        func bell(_ t: Float, _ freq: Float, _ decay: Float) -> Float {
+            guard t >= 0 else { return 0 }
+            let attack: Float = min(1, t * 400)
+            let e1: Float = exp(-t * decay)
+            let e2: Float = exp(-t * decay * 2)
+            let w: Float = 2 * Float.pi * freq * t
+            let partials: Float = sin(w) + 0.5 * e1 * sin(w * 2.76) + 0.25 * e2 * sin(w * 5.4)
+            return attack * e1 * partials
+        }
+        var out: [Effect: AVAudioPCMBuffer] = [:]
+        out[.jingle] = buffer(0.9) { t in
+            0.10 * (bell(t, 1568, 7) + bell(t - 0.07, 1760, 7) + bell(t - 0.16, 2093, 8) + bell(t - 0.22, 1568, 9))
+        }
+        out[.chime] = buffer(1.4) { t in
+            0.12 * (bell(t, 1047, 4) + bell(t - 0.12, 1319, 4) + bell(t - 0.24, 1568, 4))
+        }
+        out[.secretChime] = buffer(2.2) { t in
+            let a: Float = bell(t, 1047, 3) + bell(t - 0.12, 1319, 3) + bell(t - 0.24, 1568, 3)
+            let b: Float = bell(t - 0.36, 2093, 3) + bell(t - 0.5, 2637, 2.5)
+            return 0.10 * (a + b)
+        }
+        out[.tap] = buffer(0.25) { t in 0.45 * sin(2 * Float.pi * 110 * t) * exp(-t * 22) }
+        return out
     }
 
     func setLevel(_ value: Float) {
@@ -161,6 +214,43 @@ final class HapticPurr {
         } catch {
             player = nil
         }
+    }
+
+    /// one short tap (box shakes)
+    func transient(intensity: Float, sharpness: Float) {
+        play([CHHapticEvent(eventType: .hapticTransient,
+                            parameters: [CHHapticEventParameter(parameterID: .hapticIntensity, value: intensity),
+                                         CHHapticEventParameter(parameterID: .hapticSharpness, value: sharpness)],
+                            relativeTime: 0)])
+    }
+
+    /// basic cat: a quick triple tap; secret cat: a rising roll and a long hum
+    func reveal(secret: Bool) {
+        var events: [CHHapticEvent] = []
+        let n = secret ? 8 : 3
+        for i in 0..<n {
+            let v: Float = secret ? 0.55 + 0.05 * Float(i) : 0.9
+            events.append(CHHapticEvent(eventType: .hapticTransient,
+                                        parameters: [CHHapticEventParameter(parameterID: .hapticIntensity, value: v),
+                                                     CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.6)],
+                                        relativeTime: Double(i) * (secret ? 0.09 : 0.1)))
+        }
+        if secret {
+            events.append(CHHapticEvent(eventType: .hapticContinuous,
+                                        parameters: [CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.8),
+                                                     CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.3)],
+                                        relativeTime: Double(n) * 0.09, duration: 0.6))
+        }
+        play(events)
+    }
+
+    private func play(_ events: [CHHapticEvent]) {
+        guard supported else { return }
+        if engine == nil || needsRebuild { rebuild() }
+        guard let engine,
+              let pattern = try? CHHapticPattern(events: events, parameters: []),
+              let p = try? engine.makePlayer(with: pattern) else { return }
+        try? p.start(atTime: CHHapticTimeImmediate)
     }
 
     func setLevel(_ value: Float) {

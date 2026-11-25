@@ -10,6 +10,10 @@ extension CatArt {
     static func widgetPose(cat: Int, frame: Int?) -> CatArt {
         let breed = Breed.all[min(max(cat, 0), Breed.all.count - 1)]
         var art = CatArt(breed: breed, placement: .widget)
+        if isLocked(breed) {          // a Christmas cat the player hasn't found yet
+            art.silhouette = true
+            return art
+        }
         art.clock = 1.0            // eyes open, mid-breath
         art.tailPhase = 0.9
         guard let frame else { return art }
@@ -29,6 +33,12 @@ extension CatArt {
                          word("♥", x: -0.44, y: 0.02, angle: -10)]
         }
         return art
+    }
+
+    /// true when the app's collection says this boxed cat isn't owned yet
+    static func isLocked(_ breed: Breed) -> Bool {
+        guard breed.isBoxed, let data = SharedCollection.load() else { return false }
+        return !data.isOwned(breed.id)
     }
 
     private static func word(_ text: String, x: CGFloat, y: CGFloat, angle: Double) -> ComicWord {
@@ -118,9 +128,8 @@ struct CatWidgetView: View {
 
     private let ink = Color(red: 0.28, green: 0.20, blue: 0.17)
 
-    private var breedName: String {
-        Breed.all[min(max(entry.cat, 0), Breed.all.count - 1)].name
-    }
+    private var breed: Breed { Breed.all[min(max(entry.cat, 0), Breed.all.count - 1)] }
+    private var breedName: String { CatArt.isLocked(breed) ? "Not found yet" : breed.name }
 
     var body: some View {
         switch family {
@@ -131,7 +140,7 @@ struct CatWidgetView: View {
                     Text(breedName)
                         .font(.system(.headline, design: .rounded))
                         .foregroundColor(ink)
-                    Text(entry.purring ? "Purrrr… ♥" : "Tap to pet")
+                    Text(CatArt.isLocked(breed) ? "Find it in a Christmas box" : entry.purring ? "Purrrr… ♥" : "Tap to pet")
                         .font(.system(.subheadline, design: .rounded))
                         .foregroundColor(ink.opacity(0.6))
                 }

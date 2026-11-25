@@ -19,6 +19,16 @@
 		B2000000000000000000B005 /* PetTheCatWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B1000000000000000000F005 /* PetTheCatWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C1000000000000000000C001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C2000000000000000000C001 /* PrivacyInfo.xcprivacy */; };
 		C1000000000000000000C002 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C2000000000000000000C002 /* PrivacyInfo.xcprivacy */; };
+		D00000000000000000000002 /* Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000001 /* Catalog.swift */; };
+		D00000000000000000000003 /* Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000001 /* Catalog.swift */; };
+		D00000000000000000000005 /* Outfits.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000004 /* Outfits.swift */; };
+		D00000000000000000000006 /* Outfits.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000004 /* Outfits.swift */; };
+		D00000000000000000000008 /* ArtRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000007 /* ArtRender.swift */; };
+		D00000000000000000000009 /* ArtRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000007 /* ArtRender.swift */; };
+		D0000000000000000000000B /* CollectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000A /* CollectionStore.swift */; };
+		D0000000000000000000000D /* BoxScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000C /* BoxScreens.swift */; };
+		D0000000000000000000000F /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000E /* CollectionView.swift */; };
+		E00000000000000000000002 /* PocketPurrTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00000000000000000000001 /* PocketPurrTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +38,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = B60000000000000000000001;
 			remoteInfo = PetTheCatWidgetExtension;
+		};
+		E00000000000000000000008 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A70000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A50000000000000000000001;
+			remoteInfo = PetTheCat;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -59,6 +76,16 @@
 		B1000000000000000000F005 /* PetTheCatWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PetTheCatWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2000000000000000000C001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C2000000000000000000C002 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		D00000000000000000000001 /* Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Catalog.swift; sourceTree = "<group>"; };
+		D00000000000000000000004 /* Outfits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Outfits.swift; sourceTree = "<group>"; };
+		D00000000000000000000007 /* ArtRender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtRender.swift; sourceTree = "<group>"; };
+		D0000000000000000000000A /* CollectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionStore.swift; sourceTree = "<group>"; };
+		D0000000000000000000000C /* BoxScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxScreens.swift; sourceTree = "<group>"; };
+		D0000000000000000000000E /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+		D00000000000000000000010 /* PetTheCat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PetTheCat.entitlements; sourceTree = "<group>"; };
+		D00000000000000000000011 /* PetTheCatWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PetTheCatWidget.entitlements; sourceTree = "<group>"; };
+		E00000000000000000000001 /* PocketPurrTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketPurrTests.swift; sourceTree = "<group>"; };
+		E00000000000000000000003 /* PetTheCatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PetTheCatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +103,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E00000000000000000000006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -83,6 +117,13 @@
 			isa = PBXGroup;
 			children = (
 				B1000000000000000000F001 /* CatArt.swift */,
+				D00000000000000000000001 /* Catalog.swift */,
+				D00000000000000000000004 /* Outfits.swift */,
+				D00000000000000000000007 /* ArtRender.swift */,
+				D0000000000000000000000A /* CollectionStore.swift */,
+				D0000000000000000000000C /* BoxScreens.swift */,
+				D0000000000000000000000E /* CollectionView.swift */,
+				D00000000000000000000010 /* PetTheCat.entitlements */,
 				29A1272130B4E49600AB09A3 /* ContentView.swift */,
 				29A1272230B4E49600AB09A3 /* FurField.swift */,
 				29A1272330B4E49600AB09A3 /* PetTheCatApp.swift */,
@@ -90,6 +131,7 @@
 				A10000000000000000000A02 /* Assets.xcassets */,
 				C2000000000000000000C001 /* PrivacyInfo.xcprivacy */,
 				B30000000000000000000001 /* PetTheCatWidget */,
+				E00000000000000000000004 /* PetTheCatTests */,
 				A40000000000000000000002 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -99,6 +141,7 @@
 			children = (
 				A20000000000000000000005 /* PetTheCat.app */,
 				B1000000000000000000F005 /* PetTheCatWidgetExtension.appex */,
+				E00000000000000000000003 /* PetTheCatTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -109,9 +152,18 @@
 				B1000000000000000000F002 /* PetTheCatWidget.swift */,
 				B1000000000000000000F003 /* PetCatIntents.swift */,
 				B1000000000000000000F004 /* Info.plist */,
+				D00000000000000000000011 /* PetTheCatWidget.entitlements */,
 				C2000000000000000000C002 /* PrivacyInfo.xcprivacy */,
 			);
 			path = PetTheCatWidget;
+			sourceTree = "<group>";
+		};
+		E00000000000000000000004 /* PetTheCatTests */ = {
+			isa = PBXGroup;
+			children = (
+				E00000000000000000000001 /* PocketPurrTests.swift */,
+			);
+			path = PetTheCatTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -153,6 +205,24 @@
 			productReference = B1000000000000000000F005 /* PetTheCatWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		E0000000000000000000000A /* PetTheCatTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E0000000000000000000000D /* Build configuration list for PBXNativeTarget "PetTheCatTests" */;
+			buildPhases = (
+				E00000000000000000000005 /* Sources */,
+				E00000000000000000000006 /* Frameworks */,
+				E00000000000000000000007 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E00000000000000000000009 /* PBXTargetDependency */,
+			);
+			name = PetTheCatTests;
+			productName = PetTheCatTests;
+			productReference = E00000000000000000000003 /* PetTheCatTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -168,6 +238,10 @@
 					};
 					B60000000000000000000001 = {
 						CreatedOnToolsVersion = 15.0;
+					};
+					E0000000000000000000000A = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = A50000000000000000000001;
 					};
 				};
 			};
@@ -186,6 +260,7 @@
 			targets = (
 				A50000000000000000000001 /* PetTheCat */,
 				B60000000000000000000001 /* PetTheCatWidgetExtension */,
+				E0000000000000000000000A /* PetTheCatTests */,
 			);
 		};
 /* End PBXProject section */
@@ -208,6 +283,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E00000000000000000000007 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -215,6 +297,11 @@
 			isa = PBXTargetDependency;
 			target = B60000000000000000000001 /* PetTheCatWidgetExtension */;
 			targetProxy = B50000000000000000000001 /* PBXContainerItemProxy */;
+		};
+		E00000000000000000000009 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A50000000000000000000001 /* PetTheCat */;
+			targetProxy = E00000000000000000000008 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -228,6 +315,12 @@
 				29A1272630B4E49600AB09A3 /* FurField.swift in Sources */,
 				29A1272730B4E49600AB09A3 /* Purr.swift in Sources */,
 				29A1272830B4E49600AB09A3 /* ContentView.swift in Sources */,
+				D00000000000000000000002 /* Catalog.swift in Sources */,
+				D00000000000000000000005 /* Outfits.swift in Sources */,
+				D00000000000000000000008 /* ArtRender.swift in Sources */,
+				D0000000000000000000000B /* CollectionStore.swift in Sources */,
+				D0000000000000000000000D /* BoxScreens.swift in Sources */,
+				D0000000000000000000000F /* CollectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +331,17 @@
 				B2000000000000000000B002 /* CatArt.swift in Sources */,
 				B2000000000000000000B003 /* PetTheCatWidget.swift in Sources */,
 				B2000000000000000000B004 /* PetCatIntents.swift in Sources */,
+				D00000000000000000000003 /* Catalog.swift in Sources */,
+				D00000000000000000000006 /* Outfits.swift in Sources */,
+				D00000000000000000000009 /* ArtRender.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E00000000000000000000005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E00000000000000000000002 /* PocketPurrTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,8 +395,9 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PetTheCat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -304,7 +409,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alinasaienko.PetTheCat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -320,8 +425,9 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PetTheCat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -333,7 +439,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alinasaienko.PetTheCat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -348,11 +454,12 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_FILE = PetTheCatWidget/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = PetTheCatWidget/PetTheCatWidget.entitlements;
 				INFOPLIST_KEY_CFBundleDisplayName = "Pocket Purr";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -361,7 +468,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alinasaienko.PetTheCat.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -378,11 +485,12 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_FILE = PetTheCatWidget/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = PetTheCatWidget/PetTheCatWidget.entitlements;
 				INFOPLIST_KEY_CFBundleDisplayName = "Pocket Purr";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -391,7 +499,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alinasaienko.PetTheCat.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -399,6 +507,47 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		E0000000000000000000000B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alinasaienko.PetTheCatTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PetTheCat.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PetTheCat";
+			};
+			name = Debug;
+		};
+		E0000000000000000000000C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alinasaienko.PetTheCatTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PetTheCat.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PetTheCat";
 			};
 			name = Release;
 		};
@@ -428,6 +577,15 @@
 			buildConfigurations = (
 				B80000000000000000000001 /* Debug */,
 				B80000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E0000000000000000000000D /* Build configuration list for PBXNativeTarget "PetTheCatTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E0000000000000000000000B /* Debug */,
+				E0000000000000000000000C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -28,7 +28,7 @@ enum Zone {
 
 // MARK: - Breeds
 
-enum Pattern { case solid, tabby, points }
+enum Pattern { case solid, tabby, points, tuxedo, aurora }
 
 struct Breed {
     let name: String
@@ -37,27 +37,64 @@ struct Breed {
     let line: Color, detail: Color
     let eye: Color, nose: Color
     let pattern: Pattern
+    /// stable id used by the collection, the store and the widget
+    var id: String = ""
+    /// outfit art from Outfits.swift (Christmas cats)
+    var outfit: String? = nil
+    /// inner-ear colour when it differs from the nose
+    var inner: Color? = nil
+    var isBoxed: Bool { outfit != nil }
 
-    static let all: [Breed] = [
+    static let classic: [Breed] = [
         Breed(name: "British Blue", base: Color(hex: 0x9CA1B3), light: Color(hex: 0xD3D6E0), shade: Color(hex: 0x737A8F),
               mark: Color(hex: 0x7E8498), line: Color(hex: 0x3D4150), detail: Color(hex: 0x4A4F60),
-              eye: Color(hex: 0xF2B53A), nose: Color(hex: 0xE7A1A6), pattern: .solid),
+              eye: Color(hex: 0xF2B53A), nose: Color(hex: 0xE7A1A6), pattern: .solid, id: "blue"),
         Breed(name: "Siamese", base: Color(hex: 0xF4E8D6), light: Color(hex: 0xFDF8F0), shade: Color(hex: 0xDCC8AA),
               mark: Color(hex: 0x6E5142), line: Color(hex: 0x4E3B30), detail: Color(hex: 0x5A4537),
-              eye: Color(hex: 0x6CB4EE), nose: Color(hex: 0x8C6157), pattern: .points),
+              eye: Color(hex: 0x6CB4EE), nose: Color(hex: 0x8C6157), pattern: .points, id: "siamese"),
         Breed(name: "Ginger Tabby", base: Color(hex: 0xF2A65E), light: Color(hex: 0xFDE3C4), shade: Color(hex: 0xD07F38),
               mark: Color(hex: 0xD47833), line: Color(hex: 0x6E3A14), detail: Color(hex: 0x7A4218),
-              eye: Color(hex: 0x8CC24F), nose: Color(hex: 0xF09AA0), pattern: .tabby),
+              eye: Color(hex: 0x8CC24F), nose: Color(hex: 0xF09AA0), pattern: .tabby, id: "ginger"),
         Breed(name: "Black", base: Color(hex: 0x34343B), light: Color(hex: 0x4D4D57), shade: Color(hex: 0x202026),
               mark: Color(hex: 0x34343B), line: Color(hex: 0x141417), detail: Color(hex: 0x8A8A96),
-              eye: Color(hex: 0xF5C543), nose: Color(hex: 0x5A4A50), pattern: .solid),
+              eye: Color(hex: 0xF5C543), nose: Color(hex: 0x5A4A50), pattern: .solid, id: "black"),
         Breed(name: "White", base: Color(hex: 0xFBF8F4), light: Color(hex: 0xFFFFFF), shade: Color(hex: 0xE6DFD6),
               mark: Color(hex: 0xFBF8F4), line: Color(hex: 0x7D746B), detail: Color(hex: 0x8A8178),
-              eye: Color(hex: 0x6CB0F0), nose: Color(hex: 0xF4A9B0), pattern: .solid),
+              eye: Color(hex: 0x6CB0F0), nose: Color(hex: 0xF4A9B0), pattern: .solid, id: "white"),
         Breed(name: "Grey Tabby", base: Color(hex: 0xA9A49C), light: Color(hex: 0xDDD9D2), shade: Color(hex: 0x857F76),
               mark: Color(hex: 0x6B665E), line: Color(hex: 0x45413A), detail: Color(hex: 0x4E4A43),
-              eye: Color(hex: 0xE9C04A), nose: Color(hex: 0xD99A98), pattern: .tabby)
+              eye: Color(hex: 0xE9C04A), nose: Color(hex: 0xD99A98), pattern: .tabby, id: "greytabby")
     ]
+
+    static let christmas: [Breed] = [
+        Breed(name: "Gingerbread", base: Color(hex: 0xC98A4B), light: Color(hex: 0xEBC08E), shade: Color(hex: 0xA86A33),
+              mark: Color(hex: 0xA86A33), line: Color(hex: 0x5E3415), detail: Color(hex: 0x5E3415),
+              eye: Color(hex: 0x7FCFB0), nose: Color(hex: 0xE58A8A), pattern: .solid,
+              id: "gingerbread", outfit: "gingerbread", inner: Color(hex: 0xF0A99B)),
+        Breed(name: "Reindeer", base: Color(hex: 0x7A5238), light: Color(hex: 0xF3E3C8), shade: Color(hex: 0x5C3C28),
+              mark: Color(hex: 0x5C3C28), line: Color(hex: 0x3A2416), detail: Color(hex: 0x3A2416),
+              eye: Color(hex: 0xE8A33D), nose: Color(hex: 0xE0413A), pattern: .solid,
+              id: "reindeer", outfit: "reindeer", inner: Color(hex: 0xD99A86)),
+        Breed(name: "Elf", base: Color(hex: 0xFBF6EE), light: Color(hex: 0xFFFFFF), shade: Color(hex: 0xD9CDBD),
+              mark: Color(hex: 0xD9CDBD), line: Color(hex: 0x7E756D), detail: Color(hex: 0x7E756D),
+              eye: Color(hex: 0x7DBE5A), nose: Color(hex: 0xF0A3AE), pattern: .solid,
+              id: "elf", outfit: "elf", inner: Color(hex: 0xF5B9BF)),
+        Breed(name: "Frost", base: Color(hex: 0xB8B4D6), light: Color(hex: 0xE2E0F0), shade: Color(hex: 0x918CB8),
+              mark: Color(hex: 0x918CB8), line: Color(hex: 0x4A4672), detail: Color(hex: 0x4A4672),
+              eye: Color(hex: 0x8ED3F2), nose: Color(hex: 0xE5A0C0), pattern: .solid,
+              id: "frost", outfit: "frost", inner: Color(hex: 0xE8B9D3)),
+        Breed(name: "Cocoa", base: Color(hex: 0x2E2A2C), light: Color(hex: 0xFBF8F3), shade: Color(hex: 0x1A1718),
+              mark: Color(hex: 0x1A1718), line: Color(hex: 0x141113), detail: Color(hex: 0x8A8A96),
+              eye: Color(hex: 0xF2C14E), nose: Color(hex: 0xF0A3AE), pattern: .tuxedo,
+              id: "cocoa", outfit: "cocoa", inner: Color(hex: 0xC98C9A)),
+        Breed(name: "Midnight Star", base: Color(hex: 0x1E2547), light: Color(hex: 0x323C72), shade: Color(hex: 0x121733),
+              mark: Color(hex: 0x121733), line: Color(hex: 0x6470B8), detail: Color(hex: 0x9AA4E0),
+              eye: Color(hex: 0xFFD166), nose: Color(hex: 0xF2A7C3), pattern: .aurora,
+              id: "midnight", outfit: "midnight", inner: Color(hex: 0x8A6FD0))
+    ]
+
+    /// classic first, then the boxed series; the widget relies on this order
+    static let all: [Breed] = classic + christmas
 }
 
 extension Color {
@@ -146,7 +183,7 @@ private func taper(_ a: CGPoint, _ c: CGPoint, _ e: CGPoint, _ w0: CGFloat) -> P
 /// Everything needed to draw (or hit-test) the cat for a single frame.
 /// The app builds one from its @State every frame; the widget builds fixed poses.
 struct CatArt {
-    enum Placement { case screen, widget }
+    enum Placement { case screen, widget, thumb }
 
     var breed: Breed
     var placement: Placement = .screen
@@ -160,14 +197,19 @@ struct CatArt {
     var tailPhase: Double = 0
     var clock: Double = 0
     var words: [ComicWord] = []
+    /// a flat grey shape for cats the player hasn't found yet
+    var silhouette = false
+    var silhouetteColor = Color(hex: 0xD6CFD0)
 
     func makeGeo(_ size: CGSize) -> Geo {
         let w = size.width, h = size.height
-        let u: CGFloat = placement == .widget ? min(w, h) * 0.78 : min(w * 0.88, h * 0.55)
-        let cx = w / 2
+        let u: CGFloat = placement == .widget ? min(w, h) * 0.78
+            : placement == .thumb ? min(w, h) * 0.74 : min(w * 0.88, h * 0.55)
+        // thumbnails leave room on the right for the tail and above for hats
+        let cx = placement == .thumb ? w / 2 - u * 0.10 : w / 2
         let sq = squish
         let breathe = 1 + 0.015 * CGFloat(sin(clock * 2 * .pi / 3.2))
-        let floorY = placement == .widget ? h * 0.92 : h * 0.72
+        let floorY = placement == .widget ? h * 0.92 : placement == .thumb ? h * 0.95 : h * 0.72
         let bRX = u * 0.36 * (1 + 0.10 * sq)
         let bRY = u * 0.30 * (1 - 0.10 * sq) * breathe
         let bx = cx + lean.x * u * 0.03
@@ -354,6 +396,39 @@ struct CatArt {
         let outline = StrokeStyle(lineWidth: lw, lineCap: .round, lineJoin: .round)
         func line(_ w: CGFloat) -> StrokeStyle { StrokeStyle(lineWidth: w, lineCap: .round, lineJoin: .round) }
 
+        if silhouette {
+            let sil = GraphicsContext.Shading.color(silhouetteColor)
+            ctx.fill(poly(tailOutline(g, tailCenter(g))), with: sil)
+            ctx.fill(poly(bodyPoints(g)), with: sil)
+            for s in signs { ctx.fill(poly(earPoints(g, s, 0, 0)), with: sil) }
+            ctx.fill(poly(headPoints(g)), with: sil)
+            return
+        }
+
+        // Frost: slow snow behind him
+        if b.outfit == "frost" {
+            for i in 0..<14 {
+                let fx = CGFloat((sin(Double(i) * 12.9898) * 43758.5453).truncatingRemainder(dividingBy: 1)).magnitude
+                let fy = CGFloat((sin(Double(i) * 78.233) * 12345.678).truncatingRemainder(dividingBy: 1)).magnitude
+                let fall = (fy * 1.3 + CGFloat(clock) * 0.05).truncatingRemainder(dividingBy: 1.3) - 0.15
+                let drift = CGFloat(sin(clock * 0.8 + Double(i))) * u * 0.015
+                let c = pt(g.bx + (fx - 0.5) * u * 1.3 + drift, g.floorY - u * 1.15 + fall * u * 1.15)
+                let rr = u * 0.014 * (1 + fx)
+                ctx.fill(oval(c, rr, rr), with: .color(Color(hex: 0xC9E4F5).opacity(0.9)))
+            }
+        }
+        // Midnight Star: twinkling sparkles, brighter while petted
+        if b.outfit == "midnight" {
+            let stars: [(CGFloat, CGFloat, CGFloat, UInt32)] = [(-0.62, -0.78, 1.4, 0xFFD166), (0.62, -0.62, 1.1, 0x9B7BFF),
+                                                               (-0.66, -0.18, 0.9, 0x5FE0C8), (-0.38, -1.05, 0.8, 0x5FE0C8),
+                                                               (0.48, -1.0, 0.9, 0xFFD166), (0.70, -0.25, 0.8, 0xFFD166)]
+            for (i, st) in stars.enumerated() {
+                let tw = 0.7 + 0.3 * CGFloat(sin(clock * (3 + 4 * Double(it)) + Double(i) * 1.7))
+                let size = u * 0.035 * st.2 * tw * (1 + 0.4 * it)
+                ctx.fill(ArtRender.sparkle(pt(g.bx + st.0 * u, g.floorY + st.1 * u), size), with: .color(Color(hex: st.3)))
+            }
+        }
+
         // Ground shadow
         ctx.drawLayer { l in
             l.addFilter(.blur(radius: u * 0.015))
@@ -364,6 +439,10 @@ struct CatArt {
         let tc = tailCenter(g)
         let tail = poly(tailOutline(g, tc))
         ctx.fill(tail, with: .color(limb))
+        if b.pattern == .aurora {
+            ctx.fill(tail, with: .linearGradient(Gradient(colors: [Color(hex: 0x5FE0C8), Color(hex: 0x9B7BFF)]),
+                                                 startPoint: tc[0], endPoint: tc[tc.count - 1]))
+        }
         if b.pattern == .tabby {
             ctx.drawLayer { l in
                 l.clip(to: tail)
@@ -397,6 +476,12 @@ struct CatArt {
                 s2.addFilter(.blur(radius: u * 0.012))
                 s2.fill(oval(pt(g.bx, g.by + g.bRY * 0.10), g.bRX * 0.42, g.bRY * 0.75), with: .color(b.light.opacity(0.86)))
             }
+            if b.pattern == .tuxedo {   // crisp white bib
+                l.drawLayer { s3 in
+                    s3.addFilter(.blur(radius: u * 0.004))
+                    s3.fill(oval(pt(g.bx, g.by + g.bRY * 0.05), g.bRX * 0.40, g.bRY * 0.85), with: .color(b.light))
+                }
+            }
             if b.pattern == .tabby {
                 for s in signs {
                     for k in 0..<3 {
@@ -410,6 +495,7 @@ struct CatArt {
                 }
             }
         }
+        ArtRender.drawOutfit(b.outfit, layer: .bodyPattern, in: ctx, geo: g, head: nil, body: body)
         ctx.stroke(body, with: .color(b.line), style: outline)
 
         // Legs: inner leg lines and haunch curves (kept inside the body outline)
@@ -428,6 +514,12 @@ struct CatArt {
         }
         }
 
+        // Outfit on the body (sweater, buttons), then the outline again on top of it
+        if ArtRender.hasLayer(b.outfit, .body) {
+            ArtRender.drawOutfit(b.outfit, layer: .body, in: ctx, geo: g, head: nil, body: body)
+            ctx.stroke(body, with: .color(b.line), style: outline)
+        }
+
         // Paws
         for s in signs {
             let pc = pt(g.bx + s * g.bRX * 0.17, g.floorY - u * 0.032)
@@ -442,14 +534,25 @@ struct CatArt {
             ctx.stroke(toes, with: .color(b.detail), style: line(lw * 0.7))
         }
 
+        ArtRender.drawOutfit(b.outfit, layer: .paw, in: ctx, geo: g, head: nil, body: body)
+
         // Ears (behind the head)
         for s in signs {
             let twitch: CGFloat = (zone == .ears && touching) ? CGFloat(sin(phase * 9 + Double(s))) * r * 0.05 : 0
             let ear = poly(earPoints(g, s, irr, twitch))
             ctx.fill(ear, with: .color(points ? b.mark : b.base))
+            if b.pattern == .aurora {   // aurora-tipped ears
+                let tip = pt(hx + s * r * 0.70, hy - r * 1.12)
+                ctx.drawLayer { l in
+                    l.clip(to: ear)
+                    l.fill(oval(tip, r * 0.42, r * 0.42),
+                           with: .linearGradient(Gradient(colors: [Color(hex: 0x5FE0C8), Color(hex: 0x9B7BFF)]),
+                                                 startPoint: pt(tip.x - s * r * 0.3, tip.y), endPoint: pt(tip.x + s * r * 0.1, tip.y + r * 0.4)))
+                }
+            }
             ctx.stroke(ear, with: .color(b.line), style: outline)
             let innerPts = earPoints(g, s, irr, twitch, k: 0.58)
-            ctx.fill(poly(innerPts), with: .color(b.nose.opacity(0.8)))
+            ctx.fill(poly(innerPts), with: .color((b.inner ?? b.nose).opacity(0.8)))
             // fluffy tuft inside the ear
             let ic = pt(innerPts.map(\.x).reduce(0, +) / CGFloat(innerPts.count),
                         innerPts.map(\.y).reduce(0, +) / CGFloat(innerPts.count))
@@ -493,6 +596,14 @@ struct CatArt {
                 }
             }
         }
+        if b.pattern == .tuxedo {   // crisp white muzzle
+            ctx.drawLayer { l in
+                l.clip(to: head)
+                l.addFilter(.blur(radius: u * 0.004))
+                l.fill(oval(pt(hx, hy + r * 0.40), r * 0.50, r * 0.30), with: .color(b.light))
+            }
+        }
+        ArtRender.drawOutfit(b.outfit, layer: .headPattern, in: ctx, geo: g, head: head, body: body)
         ctx.stroke(head, with: .color(b.line), style: outline)
 
         // Chest ruff mark and a little tuft on the crown
@@ -500,11 +611,14 @@ struct CatArt {
         let zz = (0..<5).map { i in pt(hx - r * 0.16 + CGFloat(i) * r * 0.08, chestY + (i % 2 == 1 ? r * 0.05 : 0)) }
         ctx.stroke(poly(zz, closed: false), with: .color(b.detail.opacity(0.67)), style: line(lw * 0.8))
         let crown = hy - g.ryT
-        for k in [CGFloat(-1), CGFloat(0), CGFloat(1)] {
+        let crownTuft: [CGFloat] = ArtRender.hasLayer(b.outfit, .top) ? [] : [-1, 0, 1]   // hidden under hats
+        for k in crownTuft {
             ctx.stroke(poly(curve(pt(hx + k * r * 0.05, crown + r * 0.01), pt(hx + k * r * 0.07, crown - r * 0.06),
                                   pt(hx + k * r * 0.12 + r * 0.02, crown - r * 0.09), 8), closed: false),
                        with: .color(b.line), style: line(lw * 0.8))
         }
+
+        ArtRender.drawOutfit(b.outfit, layer: .face, in: ctx, geo: g, head: head, body: body)
 
         // Blush
         ctx.drawLayer { l in
@@ -604,6 +718,19 @@ struct CatArt {
             }
         }
         ctx.stroke(wh, with: .color(b.detail), style: line(lw * 0.7))
+
+        // Reindeer: the nose glows, more while he purrs
+        if b.outfit == "reindeer" {
+            let glow = 0.35 + 0.65 * Double(it)
+            ctx.drawLayer { l in
+                l.addFilter(.blur(radius: u * 0.02))
+                l.fill(oval(pt(hx, hy + r * 0.32), r * 0.22, r * 0.22), with: .color(Color(hex: 0xFF6B5E).opacity(0.45 * glow)))
+            }
+        }
+
+        // Outfit around the neck and on top of the head
+        ArtRender.drawOutfit(b.outfit, layer: .neck, in: ctx, geo: g, head: head, body: body)
+        ArtRender.drawOutfit(b.outfit, layer: .top, in: ctx, geo: g, head: head, body: body)
 
         // Cartoon "happy vibes": zig-zags around him when he's really satisfied
         let joy = max(0, (it - 0.6) / 0.4) * (1 - irr)

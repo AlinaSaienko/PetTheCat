@@ -4,6 +4,9 @@ import Combine
 // MARK: - Screen
 
 struct ContentView: View {
+    @ObservedObject private var store = CollectionStore.shared
+    @Environment(\.scenePhase) private var scenePhase
+
     @State private var intensity: CGFloat = 0
     @State private var irritation: CGFloat = 0
     @State private var squish: CGFloat = 0
@@ -22,13 +25,18 @@ struct ContentView: View {
     private let purr = Purr.shared
     @State private var words: [ComicWord] = []
     @State private var wordTimer: Double = 0
-    @AppStorage("breedIndex") private var breedIndex = 0
+    @State private var chimeTimer: Double = 0
+
+    // Phase 2 screens
+    @State private var showPopup = false
+    @State private var opening = false
+    @State private var showCollection = false
+    @State private var showOdds = false
 
     private let timer = Timer.publish(every: 1.0 / 60.0, on: .main, in: .common).autoconnect()
-    private let bg = Color(red: 0.98, green: 0.96, blue: 0.93)
     private let ink = Color(red: 0.28, green: 0.20, blue: 0.17)
 
-    private var breed: Breed { Breed.all[min(max(breedIndex, 0), Breed.all.count - 1)] }
+    private var breed: Breed { store.selectedBreed }
 
     /// the cat as it looks right now (drawing + hit-testing live in CatArt.swift)
     private var art: CatArt {
@@ -44,7 +52,7 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                bg.ignoresSafeArea()
+                Palette.cream.ignoresSafeArea()
                 Canvas { ctx, size in art.drawCat(ctx, size) }
                     .gesture(
                         DragGesture(minimumDistance: 0)
@@ -52,6 +60,10 @@ struct ContentView: View {
                                 let p = value.location
                                 let z = art.zoneAt(p, art.makeGeo(geo.size))
                                 if let z, z.disliked, zone != z { wordTimer = 0 }
+                                if z == .ears, zone != .ears, breed.id == "elf" || breed.id == "midnight" {
+                                    purr.play(.jingle)
+                                    addWord("Jingle!", angry: false)
+                                }
                                 zone = z
                                 touching = (z != nil)
                                 guard let z else { lastPoint = nil; return }
@@ -72,44 +84,176 @@ struct ContentView: View {
                     .onChange(of: fingerDown) { down in
                         if !down { releaseFinger() }
                     }
+                    .accessibilityLabel("\(breed.name) cat. Drag on the cat to pet it.")
 
-                VStack {
-                    Text(label)
-                        .font(.system(.title3, design: .rounded))
-                        .foregroundColor(ink.opacity(0.6))
-                        .padding(.top, 24)
-                        .animation(.easeInOut(duration: 0.25), value: label)
+                VStack(spacing: 0) {
+                    topBar
                     Spacer()
                     breedPicker
                 }
-            }
-        }
-        .onReceive(timer) { _ in tick() }
-    }
 
-    private var breedPicker: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
-                ForEach(Array(Breed.all.enumerated()), id: \.offset) { i, b in
-                    Button { breedIndex = i } label: {
-                        HStack(spacing: 6) {
-                            Circle()
-                                .fill(LinearGradient(colors: [b.base, b.pattern == .solid ? b.base : b.mark],
-                                                     startPoint: .top, endPoint: .bottom))
-                                .frame(width: 18, height: 18)
-                                .overlay(Circle().stroke(Color.black.opacity(0.15)))
-                            Text(b.name).font(.system(.subheadline, design: .rounded))
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(Capsule().fill(Color.black.opacity(i == breedIndex ? 0.12 : 0.04)))
-                        .foregroundColor(ink)
-                    }
+                if showPopup {
+                    BoxPopupView(store: store,
+                                 onOpen: { showPopup = false; opening = true },
+                                 onLater: { showPopup = false },
+                                 onOdds: { showOdds = true })
+                        .transition(.opacity)
+                        .zIndex(1)
                 }
             }
-            .padding(.horizontal, 16)
+            .animation(.easeInOut(duration: 0.2), value: showPopup)
+        }
+        .onReceive(timer) { _ in tick() }
+        .onAppear { checkBoxes() }
+        .onChange(of: scenePhase) { p in
+            if p == .active { checkBoxes() }
+        }
+        .fullScreenCover(isPresented: $opening) {
+            BoxOpeningView(store: store,
+                           onPet: { id in store.select(id); opening = false },
+                           onCollection: {
+                               opening = false
+                               DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) { showCollection = true }
+                           },
+                           onClose: { opening = false })
+        }
+        .fullScreenCover(isPresented: $showCollection) {
+            CollectionView(store: store,
+                           onPet: { id in store.select(id); showCollection = false },
+                           onClose: { showCollection = false })
+        }
+        .sheet(isPresented: $showOdds) { OddsSheet(store: store) }
+    }
+
+    // MARK: - Top bar: collection, hint, gift
+
+    private var topBar: some View {
+        HStack(alignment: .top) {
+            Button { showCollection = true } label: {
+                Image(systemName: "square.grid.2x2.fill")
+                    .font(.system(size: 19, weight: .semibold))
+                    .foregroundColor(Color(hex: 0x8C7F77))
+                    .frame(width: 48, height: 48)
+                    .background(Circle().fill(Palette.chip))
+            }
+            .accessibilityLabel("My cats")
+
+            Spacer()
+            Text(label)
+                .font(.system(.title3, design: .rounded))
+                .foregroundColor(ink.opacity(0.6))
+                .multilineTextAlignment(.center)
+                .padding(.top, 12)
+                .animation(.easeInOut(duration: 0.25), value: label)
+            Spacer()
+
+            giftButton
+        }
+        .padding(.horizontal, 18)
+        .padding(.top, 8)
+    }
+
+    private var giftButton: some View {
+        Button {
+            if store.unopened > 0 { showPopup = true } else { showCollection = true }
+        } label: {
+            Image(systemName: "gift")
+                .font(.system(size: 21, weight: .semibold))
+                .foregroundColor(Color(hex: 0xB5342F))
+                .frame(width: 48, height: 48)
+                .background(Circle().fill(Palette.chip))
+                .overlay(alignment: .topTrailing) {
+                    if store.unopened > 0 {
+                        Text("\(store.unopened)")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 5)
+                            .frame(minWidth: 20, minHeight: 20)
+                            .background(Capsule().fill(Palette.red))
+                            .overlay(Capsule().stroke(Palette.cream, lineWidth: 2))
+                            .offset(x: 3, y: -3)
+                    }
+                }
+        }
+        // Hold for 2 seconds to get a box outside the season (for App Review and testing).
+        .simultaneousGesture(LongPressGesture(minimumDuration: 2).onEnded { _ in
+            store.grantBox()
+            purr.tapHaptic(0.8)
+        })
+        .accessibilityLabel(store.unopened > 0 ? "Surprise boxes: \(store.unopened) unopened" : "Surprise boxes: none right now")
+    }
+
+    // MARK: - Picker: owned cats only
+
+    private var breedPicker: some View {
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(store.ownedBreeds, id: \.id) { b in
+                        let selected = b.id == breed.id
+                        let isNew = store.isNew(b.id)
+                        Button { store.select(b.id) } label: {
+                            HStack(spacing: 9) {
+                                Circle()
+                                    .fill(chipFill(b))
+                                    .frame(width: 22, height: 22)
+                                    .overlay(Circle().stroke(Color(hex: 0x3E302B).opacity(0.12), lineWidth: 1))
+                                Text(b.name).font(.system(size: 16))
+                                if b.isBoxed { SnowflakeMark() }
+                            }
+                            .padding(.leading, 14)
+                            .padding(.trailing, 18)
+                            .frame(height: 46)
+                            .background(Capsule().fill(selected ? Palette.chipOn : Palette.chip))
+                            .overlay(alignment: .topTrailing) {
+                                if isNew {
+                                    Circle().fill(Palette.red)
+                                        .frame(width: 10, height: 10)
+                                        .overlay(Circle().stroke(Palette.cream, lineWidth: 2))
+                                        .offset(x: -3, y: 1)
+                                }
+                            }
+                            .foregroundColor(Color(hex: 0x3E302B))
+                        }
+                        .id(b.id)
+                        .accessibilityLabel(b.name + (b.isBoxed ? ", Christmas" : "") + (isNew ? ", new" : ""))
+                        .accessibilityAddTraits(selected ? .isSelected : [])
+                    }
+                }
+                .padding(.horizontal, 20)
+            }
+            .onAppear { proxy.scrollTo(breed.id, anchor: .center) }
+            .onChange(of: breed.id) { id in
+                withAnimation { proxy.scrollTo(id, anchor: .center) }
+            }
         }
         .padding(.bottom, 12)
+    }
+
+    private func chipFill(_ b: Breed) -> AnyShapeStyle {
+        switch b.id {
+        case "elf":
+            return AnyShapeStyle(AngularGradient(gradient: Gradient(stops: [
+                .init(color: Color(hex: 0xFBF6EE), location: 0), .init(color: Color(hex: 0xFBF6EE), location: 0.5),
+                .init(color: Color(hex: 0xE8964A), location: 0.5), .init(color: Color(hex: 0xE8964A), location: 0.75),
+                .init(color: Color(hex: 0x3A3438), location: 0.75), .init(color: Color(hex: 0x3A3438), location: 1)]),
+                center: .center))
+        case "midnight":
+            return AnyShapeStyle(LinearGradient(colors: [Color(hex: 0x1E2547), Color(hex: 0x9B7BFF)], startPoint: .top, endPoint: .bottom))
+        default:
+            let two = b.pattern == .tabby || b.pattern == .points
+            return AnyShapeStyle(LinearGradient(colors: [b.base, two ? b.mark : b.base], startPoint: .top, endPoint: .bottom))
+        }
+    }
+
+    // MARK: - Boxes
+
+    private func checkBoxes() {
+        store.refreshFreeBoxes()
+        if store.shouldShowPopupToday() && !opening && !showCollection {
+            store.markPopupShown()
+            showPopup = true
+        }
     }
 
     // MARK: - Logic
@@ -134,6 +278,7 @@ struct ContentView: View {
             pitch += (p.pitch - pitch) * 0.04
             rate += (p.rate - rate) * 0.04
             rough += (p.rough - rough) * 0.04
+            if intensity > 0.3 { store.markSeen(breed.id) }   // petted once: the "new" dot goes away
         } else {
             intensity = max(0, intensity - 0.007)
             irritation = max(0, irritation - 0.012)
@@ -145,6 +290,13 @@ struct ContentView: View {
         lean.y += (leanTarget.y - lean.y) * 0.12
         let level = intensity * max(0, 1 - irritation * 1.3)
         purr.update(level: Float(level), pitch: pitch, rate: rate, rough: rough)
+
+        // Midnight Star: a soft bell chime layered on the purr
+        chimeTimer -= 1.0 / 60.0
+        if breed.id == "midnight", level > 0.5, chimeTimer <= 0 {
+            purr.play(.chime)
+            chimeTimer = 3.2
+        }
     }
 
     private func updateWords() {
@@ -163,7 +315,11 @@ struct ContentView: View {
             addWord(["Mew?!", "Mew!", "Mrrow!", "Hss!", "Mew?!", "😾", "🙀"].randomElement()!, angry: true)
             wordTimer = 0.75
         } else if intensity > 0.2 && (touching || intensity > 0.5) {
-            addWord(["Purr", "Purrr", "Prrr", "Purr~", "Mrrr", "Purr", "♥", "😻", "😽", "😺"].randomElement()!, angry: false)
+            let special = Catalog.specialWords(breed.id)
+            let text = !special.isEmpty && Double.random(in: 0...1) < 0.3
+                ? special.randomElement()!
+                : ["Purr", "Purrr", "Prrr", "Purr~", "Mrrr", "Purr", "♥", "😻", "😽", "😺"].randomElement()!
+            addWord(text, angry: false)
             wordTimer = max(0.2, 0.6 - 0.4 * Double(intensity))
         }
     }

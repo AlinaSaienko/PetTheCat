@@ -6,6 +6,8 @@ import WidgetKit
 enum CatBreed: String, AppEnum, CaseIterable {
     // keep the same order as Breed.all in CatArt.swift
     case britishBlue, siamese, gingerTabby, black, white, greyTabby
+    // Christmas Series (shown as a silhouette until found in a box)
+    case gingerbread, reindeer, elf, frost, cocoa, midnightStar
 
     static let typeDisplayRepresentation: TypeDisplayRepresentation = "Cat"
     static let caseDisplayRepresentations: [CatBreed: DisplayRepresentation] = [
@@ -14,7 +16,13 @@ enum CatBreed: String, AppEnum, CaseIterable {
         .gingerTabby: "Ginger Tabby",
         .black: "Black",
         .white: "White",
-        .greyTabby: "Grey Tabby"
+        .greyTabby: "Grey Tabby",
+        .gingerbread: "Gingerbread",
+        .reindeer: "Reindeer",
+        .elf: "Elf",
+        .frost: "Frost",
+        .cocoa: "Cocoa",
+        .midnightStar: "Midnight Star"
     ]
 
     /// index into Breed.all
