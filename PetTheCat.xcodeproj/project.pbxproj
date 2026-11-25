@@ -67,8 +67,8 @@
 		29A1272230B4E49600AB09A3 /* FurField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FurField.swift; sourceTree = "<group>"; };
 		29A1272330B4E49600AB09A3 /* PetTheCatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetTheCatApp.swift; sourceTree = "<group>"; };
 		29A1272430B4E49600AB09A3 /* Purr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purr.swift; sourceTree = "<group>"; };
-		A20000000000000000000005 /* PetTheCat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PetTheCat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10000000000000000000A02 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000000000000000000005 /* PetTheCat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PetTheCat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1000000000000000000F001 /* CatArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatArt.swift; sourceTree = "<group>"; };
 		B1000000000000000000F002 /* PetTheCatWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetTheCatWidget.swift; sourceTree = "<group>"; };
 		B1000000000000000000F003 /* PetCatIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetCatIntents.swift; sourceTree = "<group>"; };
@@ -292,19 +292,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		B50000000000000000000002 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = B60000000000000000000001 /* PetTheCatWidgetExtension */;
-			targetProxy = B50000000000000000000001 /* PBXContainerItemProxy */;
-		};
-		E00000000000000000000009 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A50000000000000000000001 /* PetTheCat */;
-			targetProxy = E00000000000000000000008 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXSourcesBuildPhase section */
 		A60000000000000000000001 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -346,6 +333,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B50000000000000000000002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B60000000000000000000001 /* PetTheCatWidgetExtension */;
+			targetProxy = B50000000000000000000001 /* PBXContainerItemProxy */;
+		};
+		E00000000000000000000009 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A50000000000000000000001 /* PetTheCat */;
+			targetProxy = E00000000000000000000008 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A90000000000000000000001 /* Debug */ = {
@@ -393,16 +393,16 @@
 		A90000000000000000000003 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = PetTheCat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pocket Purr";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Pocket Purr";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -423,16 +423,16 @@
 		A90000000000000000000004 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = PetTheCat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pocket Purr";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Pocket Purr";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -453,14 +453,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = PetTheCatWidget/PetTheCatWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_FILE = PetTheCatWidget/Info.plist;
-				CODE_SIGN_ENTITLEMENTS = PetTheCatWidget/PetTheCatWidget.entitlements;
 				INFOPLIST_KEY_CFBundleDisplayName = "Pocket Purr";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -484,14 +484,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = PetTheCatWidget/PetTheCatWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 9ZZNSQLLJT;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_FILE = PetTheCatWidget/Info.plist;
-				CODE_SIGN_ENTITLEMENTS = PetTheCatWidget/PetTheCatWidget.entitlements;
 				INFOPLIST_KEY_CFBundleDisplayName = "Pocket Purr";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (

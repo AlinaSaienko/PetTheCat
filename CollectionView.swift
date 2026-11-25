@@ -35,7 +35,7 @@ struct CollectionView: View {
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(Palette.ink)
                     .frame(width: 44, height: 44)
-                    .background(Circle().fill(Color.white).shadow(color: Palette.ink.opacity(0.08), radius: 5, y: 3))
+                    .background(Circle().fill(Palette.tile).shadow(color: Palette.ink.opacity(0.08), radius: 5, y: 3))
             }
             .accessibilityLabel("Back to petting")
             VStack(alignment: .leading, spacing: 0) {
@@ -54,7 +54,7 @@ struct CollectionView: View {
     private func card<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 12, content: content)
             .padding(16)
-            .background(RoundedRectangle(cornerRadius: 24).fill(Color.white))
+            .background(RoundedRectangle(cornerRadius: 24).fill(Palette.card))
     }
 
     private var classicSection: some View {
@@ -96,7 +96,7 @@ struct CollectionView: View {
                 }
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
-                        Capsule().fill(Color(hex: 0xF1E9EE))
+                        Capsule().fill(Palette.track)
                         Capsule().fill(Palette.red)
                             .frame(width: geo.size.width * CGFloat(found) / CGFloat(max(1, s.designs.count)))
                     }
@@ -112,7 +112,7 @@ struct CollectionView: View {
                         .accessibilityHidden(true)
                     (Text("Bonus box: ").bold() + Text("get the same cat 3 times"))
                         .font(.system(size: 13))
-                        .foregroundColor(Color(hex: 0x4A4150))
+                        .foregroundColor(Palette.body)
                 }
             }
             .padding(.top, -6)
@@ -148,7 +148,7 @@ struct CollectionView: View {
                     let filled = count % 3 == 0 ? 3 : count % 3
                     HStack(spacing: 3) {
                         ForEach(0..<3, id: \.self) { i in
-                            Circle().fill(i < filled ? Color(hex: 0xE9B949) : Color(hex: 0xE8E0E6)).frame(width: 7, height: 7)
+                            Circle().fill(i < filled ? Color(hex: 0xE9B949) : Palette.track).frame(width: 7, height: 7)
                         }
                     }
                     .accessibilityHidden(true)
@@ -156,12 +156,12 @@ struct CollectionView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(EdgeInsets(top: 8, leading: 4, bottom: 10, trailing: 4))
-            .background(RoundedRectangle(cornerRadius: 18).fill(Palette.cream))
+            .background(RoundedRectangle(cornerRadius: 18).fill(Palette.tile))
             .overlay(alignment: .topTrailing) {
                 if count > 1 {
                     Text("×\(count)")
                         .font(.system(size: 12, weight: .heavy))
-                        .foregroundColor(.white)
+                        .foregroundColor(Palette.cream)
                         .padding(.horizontal, 7).padding(.vertical, 2)
                         .background(Capsule().fill(Palette.ink))
                         .padding(6)
@@ -185,8 +185,8 @@ struct CollectionView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(EdgeInsets(top: 8, leading: 4, bottom: 10, trailing: 4))
-        .background(RoundedRectangle(cornerRadius: 18).fill(Color(hex: 0xF6F2F5)))
-        .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(Color(hex: 0xE2D9E0), style: StrokeStyle(lineWidth: 2, dash: [6, 4])))
+        .background(RoundedRectangle(cornerRadius: 18).fill(Palette.missingBg))
+        .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(Palette.missingBorder, style: StrokeStyle(lineWidth: 2, dash: [6, 4])))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(b.name), not found yet")
     }
@@ -199,12 +199,12 @@ struct CollectionView: View {
                 .frame(height: 74)
             Text("Secret · 1/72")
                 .font(.system(size: 13, weight: .heavy))
-                .foregroundColor(Color(hex: 0x4B3D8F))
+                .foregroundColor(Palette.secretLabel)
         }
         .frame(maxWidth: .infinity)
         .padding(EdgeInsets(top: 8, leading: 4, bottom: 10, trailing: 4))
         .background(RoundedRectangle(cornerRadius: 18).fill(Palette.secretBg))
-        .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(Color(hex: 0xC9BEEA), style: StrokeStyle(lineWidth: 2, dash: [6, 4])))
+        .overlay(RoundedRectangle(cornerRadius: 18).strokeBorder(Palette.secretBorder, style: StrokeStyle(lineWidth: 2, dash: [6, 4])))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Secret cat, 1 in 72, not found yet")
     }

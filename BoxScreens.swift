@@ -1,22 +1,53 @@
 import SwiftUI
 import UIKit
 
-// Colours from the Phase 2 design canvas
+// Colours from the Phase 2 design canvas. Each one has a light and a dark value and
+// follows the phone's Light/Dark setting automatically (there's no setting in the app).
+extension UIColor {
+    convenience init(hex: UInt32, alpha: CGFloat = 1) {
+        self.init(red: CGFloat((hex >> 16) & 0xFF) / 255, green: CGFloat((hex >> 8) & 0xFF) / 255,
+                  blue: CGFloat(hex & 0xFF) / 255, alpha: alpha)
+    }
+}
+
+extension Color {
+    static func dynamic(_ light: UInt32, _ dark: UInt32, lightAlpha: CGFloat = 1, darkAlpha: CGFloat = 1) -> Color {
+        Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(hex: dark, alpha: darkAlpha) : UIColor(hex: light, alpha: lightAlpha) })
+    }
+}
+
 enum Palette {
-    static let cream = Color(hex: 0xFAF5EE)
-    static let ink = Color(hex: 0x2B2430)
-    static let muted = Color(hex: 0x6E6475)
-    static let red = Color(hex: 0xC8323C)
-    static let link = Color(hex: 0xB02A34)
-    static let chip = Color(hex: 0xF1EBE5)
-    static let chipOn = Color(hex: 0xE2DBD5)
+    static let cream = Color.dynamic(0xFAF5EE, 0x17131B)        // page background
+    static let card = Color.dynamic(0xFFFFFF, 0x231D28)         // cards, sheets, pop-ups
+    static let tile = Color.dynamic(0xFAF5EE, 0x2D2633)         // tiles inside cards
+    static let ink = Color.dynamic(0x2B2430, 0xF4EEF3)          // main text
+    static let muted = Color.dynamic(0x6E6475, 0xB6ACBD)        // secondary text
+    static let body = Color.dynamic(0x4A4150, 0xD4CBD8)         // small body text
+    static let hint = Color.dynamic(0x8C7F77, 0xB6ACBD)         // "Pet the cat …" hint, toolbar icons
+    static let link = Color.dynamic(0xB02A34, 0xFF8E93)
+    static let red = Color(hex: 0xC8323C)                        // red buttons stay the same
+    static let giftIcon = Color.dynamic(0xB5342F, 0xFF8A8F)
+    static let chip = Color.dynamic(0xF1EBE5, 0x2D2633)
+    static let chipOn = Color.dynamic(0xE2DBD5, 0x40374A)
+    static let chipInk = Color.dynamic(0x3E302B, 0xF4EEF3)
     static let gold = Color(hex: 0xFFD166)
     static let night = Color(hex: 0x1E2547)
     static let plum = Color(hex: 0x2A1E33)
-    static let secretInk = Color(hex: 0x5B4BA0)
-    static let secretBg = Color(hex: 0xECE7F7)
-    static let slot = Color(hex: 0xF3EEF2)
-    static let pine = Color(hex: 0x2F6B4F)
+    static let secretInk = Color.dynamic(0x5B4BA0, 0xC3B4FF)
+    static let secretLabel = Color.dynamic(0x4B3D8F, 0xCFC3FF)
+    static let secretBg = Color.dynamic(0xECE7F7, 0x2E2848)
+    static let secretBorder = Color.dynamic(0xC9BEEA, 0x5E5290)
+    static let slot = Color.dynamic(0xF3EEF2, 0x2D2633)
+    static let pine = Color.dynamic(0x2F6B4F, 0x7DCFA4)
+    static let track = Color.dynamic(0xF1E9EE, 0x3A3240)       // progress bar background
+    static let divider = Color.dynamic(0xF0EAEF, 0x332B39)
+    static let missingBg = Color.dynamic(0xF6F2F5, 0x2D2633)
+    static let missingBorder = Color.dynamic(0xE2D9E0, 0x4A414F)
+    static let outlineButton = Color.dynamic(0xD9D0DC, 0x4A414F)
+    static let dim = Color.dynamic(0x201626, 0x000000, lightAlpha: 0.55, darkAlpha: 0.62)
+    static let snowScene = Color.dynamic(0xE7EFF6, 0x22304A)
+    static let snow = Color.dynamic(0xFFFFFF, 0xC9D6E8)
+    static let revealSnow = Color.dynamic(0xECE4EC, 0x2A232F)
 }
 
 // MARK: - Small building blocks
@@ -128,18 +159,18 @@ struct BoxPopupView: View {
 
     var body: some View {
         ZStack {
-            Color(hex: 0x201626).opacity(0.55)
+            Palette.dim
                 .ignoresSafeArea()
                 .onTapGesture(perform: onLater)
                 .accessibilityHidden(true)
 
             VStack(spacing: 12) {
                 ZStack(alignment: .bottom) {
-                    RoundedRectangle(cornerRadius: 20).fill(Color(hex: 0xE7EFF6))
+                    RoundedRectangle(cornerRadius: 20).fill(Palette.snowScene)
                     Canvas { ctx, size in
                         let k = size.width / 330
                         for (x, y, r) in [(30.0, 30.0, 4.0), (80, 70, 3), (290, 40, 5), (250, 96, 3), (150, 22, 2.5), (40, 120, 2.5), (306, 140, 3)] {
-                            ctx.fill(Path(ellipseIn: CGRect(x: (x - r) * k, y: (y - r) * k, width: 2 * r * k, height: 2 * r * k)), with: .color(.white))
+                            ctx.fill(Path(ellipseIn: CGRect(x: (x - r) * k, y: (y - r) * k, width: 2 * r * k, height: 2 * r * k)), with: .color(Palette.snow))
                         }
                         var hill = Path()
                         hill.move(to: CGPoint(x: 0, y: size.height - 32))
@@ -148,7 +179,7 @@ struct BoxPopupView: View {
                         hill.addLine(to: CGPoint(x: size.width, y: size.height))
                         hill.addLine(to: CGPoint(x: 0, y: size.height))
                         hill.closeSubpath()
-                        ctx.fill(hill, with: .color(.white))
+                        ctx.fill(hill, with: .color(Palette.snow))
                     }
                     BoxArtView(side: 180)
                         .modifier(Wobble(degrees: 4, period: 1.6))
@@ -181,7 +212,7 @@ struct BoxPopupView: View {
                 }
                 HStack {
                     Button(action: onLater) {
-                        Text("Later").font(.system(size: 16, weight: .heavy)).foregroundColor(Color(hex: 0x4A4150))
+                        Text("Later").font(.system(size: 16, weight: .heavy)).foregroundColor(Palette.body)
                             .frame(minHeight: 44).padding(.horizontal, 10)
                     }
                     Spacer()
@@ -193,7 +224,7 @@ struct BoxPopupView: View {
                 .padding(.horizontal, 6)
             }
             .padding(EdgeInsets(top: 14, leading: 14, bottom: 16, trailing: 14))
-            .background(RoundedRectangle(cornerRadius: 28).fill(Color.white).shadow(color: Color.black.opacity(0.3), radius: 25, y: 20))
+            .background(RoundedRectangle(cornerRadius: 28).fill(Palette.card).shadow(color: Color.black.opacity(0.35), radius: 25, y: 20))
             .padding(.horizontal, 16)
             .accessibilityElement(children: .contain)
             .accessibilityAddTraits(.isModal)
@@ -221,7 +252,7 @@ struct BoxOpeningView: View {
     private var name: String { result.flatMap { Catalog.breed($0.id)?.name } ?? "" }
 
     private var background: Color { result == nil ? Palette.plum : secret ? Palette.night : Palette.cream }
-    private var snow: Color { result == nil ? Color(hex: 0x4A3B57) : secret ? Color(hex: 0x38427A) : Color(hex: 0xECE4EC) }
+    private var snow: Color { result == nil ? Color(hex: 0x4A3B57) : secret ? Color(hex: 0x38427A) : Palette.revealSnow }
 
     var body: some View {
         ZStack {
@@ -444,7 +475,7 @@ struct BoxOpeningView: View {
                             .font(.system(size: 16, weight: .heavy))
                             .foregroundColor(ink)
                             .frame(maxWidth: .infinity, minHeight: 50)
-                            .overlay(Capsule().stroke(secret ? Color(hex: 0x5A64A8) : Color(hex: 0xD9D0DC), lineWidth: 2))
+                            .overlay(Capsule().stroke(secret ? Color(hex: 0x5A64A8) : Palette.outlineButton, lineWidth: 2))
                     }
                 }
                 .padding(.horizontal, 20)
@@ -525,7 +556,7 @@ struct OddsSheet: View {
                             .font(.system(size: 16, weight: .heavy).monospacedDigit())
                     }
                     .padding(.vertical, 7)
-                    .overlay(alignment: .bottom) { Rectangle().fill(Color(hex: 0xF0EAEF)).frame(height: 1) }
+                    .overlay(alignment: .bottom) { Rectangle().fill(Palette.divider).frame(height: 1) }
                     .accessibilityElement(children: .combine)
                 }
             }
@@ -538,20 +569,20 @@ struct OddsSheet: View {
                         id: \.self) { rule in
                     HStack(spacing: 10) {
                         Circle().fill(Palette.red).frame(width: 8, height: 8).accessibilityHidden(true)
-                        Text(rule).font(.system(size: 14)).foregroundColor(Color(hex: 0x3B3341))
+                        Text(rule).font(.system(size: 14)).foregroundColor(Palette.body)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }
             .padding(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(RoundedRectangle(cornerRadius: 18).fill(Palette.cream))
+            .background(RoundedRectangle(cornerRadius: 18).fill(Palette.tile))
 
             Spacer(minLength: 0)
             Button { dismiss() } label: {
                 Text("Done")
                     .font(.system(size: 16, weight: .heavy))
-                    .foregroundColor(.white)
+                    .foregroundColor(Palette.cream)
                     .frame(maxWidth: .infinity, minHeight: 52)
                     .background(Capsule().fill(Palette.ink))
             }
@@ -559,8 +590,7 @@ struct OddsSheet: View {
         .foregroundColor(Palette.ink)
         .padding(.horizontal, 20)
         .padding(.bottom, 12)
-        .background(Color.white.ignoresSafeArea())
-        .environment(\.colorScheme, .light)
+        .background(Palette.card.ignoresSafeArea())
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
     }

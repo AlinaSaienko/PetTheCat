@@ -200,6 +200,8 @@ struct CatArt {
     /// a flat grey shape for cats the player hasn't found yet
     var silhouette = false
     var silhouetteColor = Color(hex: 0xD6CFD0)
+    /// drawn on a dark background: comic words and zig-zags switch to light colours
+    var onDark = false
 
     func makeGeo(_ size: CGSize) -> Geo {
         let w = size.width, h = size.height
@@ -755,7 +757,8 @@ struct CatArt {
                     zz.addLine(to: pt(start.x + dir.x * len * t + side.x * off, start.y + dir.y * len * t + side.y * off))
                 }
             }
-            ctx.stroke(zz, with: .color(b.line.opacity(0.85 * Double(min(1, joy * 1.5)))), style: line(lw * 1.1))
+            let vibe = onDark ? Color(hex: 0xF4EEF3) : b.line
+            ctx.stroke(zz, with: .color(vibe.opacity(0.85 * Double(min(1, joy * 1.5)))), style: line(lw * 1.1))
         }
 
         // Comic words
@@ -769,7 +772,8 @@ struct CatArt {
                 l.translateBy(x: hx + w.x * u, y: headTop + w.y * u)
                 l.rotate(by: .degrees(w.angle))
                 l.scaleBy(x: CGFloat(scale), y: CGFloat(scale))
-                let ink = w.angry ? Color(hex: 0xC2412F) : b.line.opacity(0.9)
+                let ink = w.angry ? Color(hex: onDark ? 0xFF8E93 : 0xC2412F)
+                                  : onDark ? Color(hex: 0xF4EEF3).opacity(0.92) : b.line.opacity(0.9)
                 l.draw(Text(w.text).font(.custom("ChalkboardSE-Bold", size: w.size * u)).foregroundColor(ink), at: .zero)
             }
         }

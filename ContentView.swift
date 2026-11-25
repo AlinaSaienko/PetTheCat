@@ -6,6 +6,7 @@ import Combine
 struct ContentView: View {
     @ObservedObject private var store = CollectionStore.shared
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.colorScheme) private var colorScheme
 
     @State private var intensity: CGFloat = 0
     @State private var irritation: CGFloat = 0
@@ -41,7 +42,8 @@ struct ContentView: View {
     /// the cat as it looks right now (drawing + hit-testing live in CatArt.swift)
     private var art: CatArt {
         CatArt(breed: breed, intensity: intensity, irritation: irritation, squish: squish, lean: lean,
-               touching: touching, zone: zone, phase: phase, tailPhase: tailPhase, clock: clock, words: words)
+               touching: touching, zone: zone, phase: phase, tailPhase: tailPhase, clock: clock, words: words,
+               onDark: colorScheme == .dark)
     }
 
     private var label: String {
@@ -53,6 +55,15 @@ struct ContentView: View {
         GeometryReader { geo in
             ZStack {
                 Palette.cream.ignoresSafeArea()
+                if colorScheme == .dark {
+                    // a faint warm glow behind the cat, so dark cats don't disappear into the background
+                    RadialGradient(colors: [Color(red: 1, green: 0.84, blue: 0.67).opacity(0.13), .clear],
+                                   center: UnitPoint(x: 0.5, y: 0.5), startRadius: 0, endRadius: geo.size.width * 0.55)
+                        .frame(width: geo.size.width * 0.92, height: geo.size.height * 0.5)
+                        .position(x: geo.size.width / 2, y: geo.size.height * 0.52)
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                }
                 Canvas { ctx, size in art.drawCat(ctx, size) }
                     .gesture(
                         DragGesture(minimumDistance: 0)
@@ -132,7 +143,7 @@ struct ContentView: View {
             Button { showCollection = true } label: {
                 Image(systemName: "square.grid.2x2.fill")
                     .font(.system(size: 19, weight: .semibold))
-                    .foregroundColor(Color(hex: 0x8C7F77))
+                    .foregroundColor(Palette.hint)
                     .frame(width: 48, height: 48)
                     .background(Circle().fill(Palette.chip))
             }
@@ -141,7 +152,7 @@ struct ContentView: View {
             Spacer()
             Text(label)
                 .font(.system(.title3, design: .rounded))
-                .foregroundColor(ink.opacity(0.6))
+                .foregroundColor(Palette.hint)
                 .multilineTextAlignment(.center)
                 .padding(.top, 12)
                 .animation(.easeInOut(duration: 0.25), value: label)
@@ -159,7 +170,7 @@ struct ContentView: View {
         } label: {
             Image(systemName: "gift")
                 .font(.system(size: 21, weight: .semibold))
-                .foregroundColor(Color(hex: 0xB5342F))
+                .foregroundColor(Palette.giftIcon)
                 .frame(width: 48, height: 48)
                 .background(Circle().fill(Palette.chip))
                 .overlay(alignment: .topTrailing) {
@@ -197,7 +208,7 @@ struct ContentView: View {
                                 Circle()
                                     .fill(chipFill(b))
                                     .frame(width: 22, height: 22)
-                                    .overlay(Circle().stroke(Color(hex: 0x3E302B).opacity(0.12), lineWidth: 1))
+                                    .overlay(Circle().stroke(Palette.chipInk.opacity(0.15), lineWidth: 1))
                                 Text(b.name).font(.system(size: 16))
                                 if b.isBoxed { SnowflakeMark() }
                             }
@@ -213,7 +224,7 @@ struct ContentView: View {
                                         .offset(x: -3, y: 1)
                                 }
                             }
-                            .foregroundColor(Color(hex: 0x3E302B))
+                            .foregroundColor(Palette.chipInk)
                         }
                         .id(b.id)
                         .accessibilityLabel(b.name + (b.isBoxed ? ", Christmas" : "") + (isNew ? ", new" : ""))
