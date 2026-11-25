@@ -18,10 +18,16 @@ enum ThemeMode: String, CaseIterable, Identifiable {
 
     /// Applied to the whole window, so full-screen covers, sheets and dynamic colours all follow it.
     func apply() {
-        for scene in UIApplication.shared.connectedScenes {
-            guard let ws = scene as? UIWindowScene else { continue }
-            for w in ws.windows { w.overrideUserInterfaceStyle = style }
+        let style = self.style
+        let set = {
+            for scene in UIApplication.shared.connectedScenes {
+                guard let ws = scene as? UIWindowScene else { continue }
+                for w in ws.windows { w.overrideUserInterfaceStyle = style }
+            }
         }
+        set()
+        // again on the next run loop, in case a menu or cover window was still being set up
+        DispatchQueue.main.async(execute: set)
     }
 }
 

@@ -116,6 +116,8 @@ struct ContentView: View {
             .animation(.easeInOut(duration: 0.2), value: showPopup)
         }
         .onReceive(timer) { _ in tick() }
+        .onAppear { (ThemeMode(rawValue: themeRaw) ?? .system).apply() }
+        .onChange(of: themeRaw) { t in (ThemeMode(rawValue: t) ?? .system).apply() }
         .onAppear { checkBoxes() }
         .onChange(of: scenePhase) { p in
             if p == .active { checkBoxes() }
@@ -172,9 +174,16 @@ struct ContentView: View {
     /// Light / Dark / System, remembered between launches
     private var themeButton: some View {
         Menu {
-            Picker("Appearance", selection: $themeRaw) {
-                ForEach(ThemeMode.allCases) { m in
-                    Label(m.title, systemImage: m.icon).tag(m.rawValue)
+            ForEach(ThemeMode.allCases) { m in
+                Button {
+                    themeRaw = m.rawValue
+                    m.apply()
+                } label: {
+                    if m.rawValue == themeRaw {
+                        Label(m.title, systemImage: "checkmark")
+                    } else {
+                        Label(m.title, systemImage: m.icon)
+                    }
                 }
             }
         } label: {
