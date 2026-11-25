@@ -33,6 +33,7 @@ struct ContentView: View {
     @State private var opening = false
     @State private var showCollection = false
     @State private var showOdds = false
+    @AppStorage(ThemeMode.key) private var themeRaw = ThemeMode.system.rawValue
 
     private let timer = Timer.publish(every: 1.0 / 60.0, on: .main, in: .common).autoconnect()
     private let ink = Color(red: 0.28, green: 0.20, blue: 0.17)
@@ -140,14 +141,18 @@ struct ContentView: View {
 
     private var topBar: some View {
         HStack(alignment: .top) {
-            Button { showCollection = true } label: {
-                Image(systemName: "square.grid.2x2.fill")
-                    .font(.system(size: 19, weight: .semibold))
-                    .foregroundColor(Palette.hint)
-                    .frame(width: 48, height: 48)
-                    .background(Circle().fill(Palette.chip))
+            VStack(spacing: 12) {
+                Button { showCollection = true } label: {
+                    Image(systemName: "square.grid.2x2.fill")
+                        .font(.system(size: 19, weight: .semibold))
+                        .foregroundColor(Palette.hint)
+                        .frame(width: 48, height: 48)
+                        .background(Circle().fill(Palette.chip))
+                }
+                .accessibilityLabel("My cats")
+
+                themeButton
             }
-            .accessibilityLabel("My cats")
 
             Spacer()
             Text(label)
@@ -162,6 +167,24 @@ struct ContentView: View {
         }
         .padding(.horizontal, 18)
         .padding(.top, 8)
+    }
+
+    /// Light / Dark / System, remembered between launches
+    private var themeButton: some View {
+        Menu {
+            Picker("Appearance", selection: $themeRaw) {
+                ForEach(ThemeMode.allCases) { m in
+                    Label(m.title, systemImage: m.icon).tag(m.rawValue)
+                }
+            }
+        } label: {
+            Image(systemName: (ThemeMode(rawValue: themeRaw) ?? .system).icon)
+                .font(.system(size: 19, weight: .semibold))
+                .foregroundColor(Palette.hint)
+                .frame(width: 48, height: 48)
+                .background(Circle().fill(Palette.chip))
+        }
+        .accessibilityLabel("Appearance: " + (ThemeMode(rawValue: themeRaw) ?? .system).title)
     }
 
     private var giftButton: some View {

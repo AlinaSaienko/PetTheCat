@@ -568,6 +568,9 @@ struct CatArt {
             ctx.stroke(tuft, with: .color(b.light.opacity(0.9)), style: line(lw * 0.8))
         }
 
+        // Collars and scarves sit on the body, under the head
+        ArtRender.drawOutfit(b.outfit, layer: .neck, in: ctx, geo: g, head: nil, body: body)
+
         // Head
         let head = poly(headPoints(g))
         ctx.fill(head, with: .color(b.base))
@@ -731,7 +734,6 @@ struct CatArt {
         }
 
         // Outfit around the neck and on top of the head
-        ArtRender.drawOutfit(b.outfit, layer: .neck, in: ctx, geo: g, head: head, body: body)
         ArtRender.drawOutfit(b.outfit, layer: .top, in: ctx, geo: g, head: head, body: body)
 
         // Cartoon "happy vibes": zig-zags around him when he's really satisfied
