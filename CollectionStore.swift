@@ -93,6 +93,7 @@ struct OpenedBox: Equatable {
     let isDuplicate: Bool
     let count: Int
     let bonusEarned: Bool
+    /// copies of this cat towards its next bonus box (1…3; a bonus comes at 3, 6, 9 …)
     let duplicateProgress: Int
 }
 
@@ -118,23 +119,19 @@ extension CollectionData {
         }
     }
 
-    /// Records an opened box. Every 3rd duplicate gives a bonus box.
+    static let copiesForBonus = 3
+
+    /// Records an opened box. The 3rd copy of the same cat (and the 6th, 9th …) gives a bonus box.
     mutating func recordOpened(_ id: String) -> OpenedBox {
         unopened = max(0, unopened - 1)
         opened += 1
         lastOpened = id
         let n = (owned[id] ?? 0) + 1
         owned[id] = n
-        var bonus = false
-        if n > 1 {
-            duplicateProgress += 1
-            if duplicateProgress >= 3 {
-                duplicateProgress = 0
-                unopened += 1
-                bonus = true
-            }
-        }
-        return OpenedBox(id: id, isDuplicate: n > 1, count: n, bonusEarned: bonus, duplicateProgress: duplicateProgress)
+        let bonus = n % Self.copiesForBonus == 0
+        if bonus { unopened += 1 }
+        let progress = n % Self.copiesForBonus == 0 ? Self.copiesForBonus : n % Self.copiesForBonus
+        return OpenedBox(id: id, isDuplicate: n > 1, count: n, bonusEarned: bonus, duplicateProgress: progress)
     }
 }
 

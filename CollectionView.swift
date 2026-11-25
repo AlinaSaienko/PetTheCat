@@ -106,17 +106,11 @@ struct CollectionView: View {
                 .accessibilityLabel("Christmas Series progress")
                 .accessibilityValue("\(found) of \(s.designs.count)")
                 HStack(spacing: 8) {
-                    HStack(spacing: 4) {
-                        ForEach(0..<3, id: \.self) { i in
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(i < store.data.duplicateProgress ? Color(hex: 0xE9B949) : Color(hex: 0xF1E9EE))
-                                .overlay(RoundedRectangle(cornerRadius: 4)
-                                    .strokeBorder(Color(hex: 0xD9C9A0), style: StrokeStyle(lineWidth: i < store.data.duplicateProgress ? 0 : 2, dash: [3, 2])))
-                                .frame(width: 14, height: 14)
-                        }
-                    }
-                    .accessibilityHidden(true)
-                    (Text("Bonus box: ").bold() + Text("\(store.data.duplicateProgress) of 3 duplicates"))
+                    Image(systemName: "gift.fill")
+                        .font(.system(size: 13))
+                        .foregroundColor(Color(hex: 0xE9B949))
+                        .accessibilityHidden(true)
+                    (Text("Bonus box: ").bold() + Text("get the same cat 3 times"))
                         .font(.system(size: 13))
                         .foregroundColor(Color(hex: 0x4A4150))
                 }
@@ -128,7 +122,7 @@ struct CollectionView: View {
                     if let b = Catalog.breed(id) {
                         let n = store.count(id)
                         if n > 0 {
-                            ownedTile(b, count: n)
+                            ownedTile(b, count: n, bonusDots: true)
                         } else if id == s.secret {
                             secretTile
                         } else {
@@ -140,7 +134,7 @@ struct CollectionView: View {
         }
     }
 
-    private func ownedTile(_ b: Breed, count: Int) -> some View {
+    private func ownedTile(_ b: Breed, count: Int, bonusDots: Bool = false) -> some View {
         Button { onPet(b.id) } label: {
             VStack(spacing: 4) {
                 CatThumb(breed: b, side: 78)
@@ -149,6 +143,16 @@ struct CollectionView: View {
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
+                if bonusDots {
+                    // copies towards the next bonus box (3rd, 6th … copy gives one)
+                    let filled = count % 3 == 0 ? 3 : count % 3
+                    HStack(spacing: 3) {
+                        ForEach(0..<3, id: \.self) { i in
+                            Circle().fill(i < filled ? Color(hex: 0xE9B949) : Color(hex: 0xE8E0E6)).frame(width: 7, height: 7)
+                        }
+                    }
+                    .accessibilityHidden(true)
+                }
             }
             .frame(maxWidth: .infinity)
             .padding(EdgeInsets(top: 8, leading: 4, bottom: 10, trailing: 4))
@@ -166,7 +170,8 @@ struct CollectionView: View {
         }
         .buttonStyle(.plain)
         .foregroundColor(Palette.ink)
-        .accessibilityLabel("Pet \(b.name)" + (count > 1 ? ", you have \(count)" : ""))
+        .accessibilityLabel("Pet \(b.name)" + (count > 1 ? ", you have \(count)" : "")
+                            + (bonusDots && count % 3 != 0 ? ", \(3 - count % 3) more for a bonus box" : ""))
     }
 
     private func missingTile(_ b: Breed) -> some View {

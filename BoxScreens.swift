@@ -120,6 +120,8 @@ struct Wobble: ViewModifier {
 
 struct BoxPopupView: View {
     @ObservedObject var store: CollectionStore
+    var title: String? = nil
+    var subtitle = "1 of 6 Christmas cats inside"
     var onOpen: () -> Void
     var onLater: () -> Void
     var onOdds: () -> Void
@@ -155,14 +157,15 @@ struct BoxPopupView: View {
                 .frame(height: 210)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
 
-                Text(store.unopened > 1 ? "\(store.unopened) Christmas boxes arrived" : "A Christmas box arrived")
+                Text(title ?? (store.unopened > 1 ? "\(store.unopened) Christmas boxes arrived" : "A Christmas box arrived"))
                     .font(.system(size: 27, weight: .heavy))
                     .multilineTextAlignment(.center)
                     .foregroundColor(Palette.ink)
                     .padding(.top, 4)
                     .accessibilityAddTraits(.isHeader)
-                Text("1 of 6 Christmas cats inside")
+                Text(subtitle)
                     .font(.system(size: 15))
+                    .multilineTextAlignment(.center)
                     .foregroundColor(Palette.muted)
                     .padding(.top, -6)
 
@@ -209,6 +212,8 @@ struct BoxOpeningView: View {
     @State private var taps = 0
     @State private var result: CollectionStore.Opened?
     @State private var pop: CGFloat = 0.4
+    @State private var showBonus = false
+    @State private var showOdds = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let purr = Purr.shared
 
@@ -237,7 +242,25 @@ struct BoxOpeningView: View {
                 tapStage
             }
         }
+        .overlay {
+            if showBonus {
+                BoxPopupView(store: store,
+                             title: "Bonus box!",
+                             subtitle: "That's your 3rd \(name) — here's a free box",
+                             onOpen: {
+                                 showBonus = false
+                                 taps = 0
+                                 pop = 0.4
+                                 result = nil
+                             },
+                             onLater: { showBonus = false },
+                             onOdds: { showOdds = true })
+                    .transition(.opacity)
+            }
+        }
         .animation(.easeInOut(duration: reduceMotion ? 0.4 : 0.25), value: result == nil)
+        .animation(.easeInOut(duration: 0.25), value: showBonus)
+        .sheet(isPresented: $showOdds) { OddsSheet(store: store) }
     }
 
     // MARK: Tap 3×
@@ -309,6 +332,12 @@ struct BoxOpeningView: View {
         }
     }
 
+    private func ordinal(_ n: Int) -> String {
+        let f = NumberFormatter()
+        f.numberStyle = .ordinal
+        return f.string(from: NSNumber(value: n)) ?? "\(n)th"
+    }
+
     private var shake: Wobble {
         switch taps {
         case 0: return Wobble(degrees: 4, period: 1.4)
@@ -336,6 +365,14 @@ struct BoxOpeningView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
             UIAccessibility.post(notification: .announcement,
                                  argument: isSecret ? "Secret cat! You found \(n)" : "You got \(n)")
+        }
+        if opened.bonusEarned {
+            // let the reveal land first, then offer the bonus box
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                guard result?.id == opened.id else { return }
+                purr.play(.jingle)
+                showBonus = true
+            }
         }
     }
 
@@ -387,8 +424,8 @@ struct BoxOpeningView: View {
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(muted)
                     .padding(.top, 6)
-                Text(r.bonusEarned ? "3 duplicates — bonus box earned! 🎁"
-                     : r.isDuplicate ? "Bonus box: \(r.duplicateProgress) of 3 duplicates"
+                Text(r.bonusEarned ? "Your \(ordinal(r.count)) \(name) — bonus box earned! 🎁"
+                     : r.isDuplicate ? "You have ×\(r.count) · get \(3 - r.duplicateProgress) more for a bonus box"
                      : "Added to My cats")
                     .font(.system(size: 17))
                     .foregroundColor(muted)
@@ -496,7 +533,7 @@ struct OddsSheet: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Free boxes").font(.system(size: 15, weight: .heavy))
                 ForEach(["1 welcome box with the update", "1 box a day, Dec 1 – Jan 6",
-                         "Unopened boxes stack up to 3", "Every 3 duplicates = 1 bonus box",
+                         "Unopened boxes stack up to 3", "Get the same cat 3 times = 1 bonus box",
                          "Never the same cat twice in a row: right after a basic cat, the other 4 are \(s.afterRepeatPercent) each and the secret cat stays 1.39%"],
                         id: \.self) { rule in
                     HStack(spacing: 10) {

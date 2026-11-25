@@ -98,7 +98,7 @@ struct CollectionData: Codable, Equatable {
     var welcomeGiven = false
     /// the last calendar day ("yyyy-MM-dd") whose free box has been handed out
     var lastDropDay: String?
-    /// duplicates collected towards the next bonus box (0…2)
+    /// unused since 1.1 build 3 (bonus boxes now come with the 3rd copy of the same cat); kept so saved data still loads
     var duplicateProgress = 0
     var selected = "blue"
     /// cats that have been petted at least once (others show a "new" dot)

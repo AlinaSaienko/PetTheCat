@@ -218,25 +218,30 @@ final class CollectionRulesTests: XCTestCase {
         XCTAssertEqual(d.unopened, 4)
     }
 
-    func testEveryThirdDuplicateGivesABonusBox() {
+    func testThirdCopyOfTheSameCatGivesABonusBox() {
         var d = CollectionData()
-        d.unopened = 10
+        d.unopened = 20
         XCTAssertFalse(d.recordOpened("elf").isDuplicate)
         var r = d.recordOpened("elf")
         XCTAssertTrue(r.isDuplicate)
-        XCTAssertEqual(r.count, 2)
-        XCTAssertEqual(r.duplicateProgress, 1)
-        r = d.recordOpened("frost")                     // new cat: no progress
-        XCTAssertEqual(r.duplicateProgress, 1)
-        _ = d.recordOpened("elf")
+        XCTAssertFalse(r.bonusEarned)
+        XCTAssertEqual(r.duplicateProgress, 2)
+        r = d.recordOpened("frost")
+        XCTAssertFalse(r.bonusEarned)
+        r = d.recordOpened("frost")
+        XCTAssertFalse(r.bonusEarned, "duplicates of different cats don't add up")
         let before = d.unopened
-        r = d.recordOpened("frost")                     // 3rd duplicate
+        r = d.recordOpened("elf")                       // 3rd Elf
         XCTAssertTrue(r.bonusEarned)
-        XCTAssertEqual(r.duplicateProgress, 0)
+        XCTAssertEqual(r.count, 3)
+        XCTAssertEqual(r.duplicateProgress, 3)
         XCTAssertEqual(d.unopened, before)              // one spent, one bonus
-        XCTAssertEqual(d.count("elf"), 3)
-        XCTAssertEqual(d.opened, 5)
-        XCTAssertEqual(d.lastOpened, "frost")
+        XCTAssertFalse(d.recordOpened("elf").bonusEarned)   // 4th
+        XCTAssertFalse(d.recordOpened("elf").bonusEarned)   // 5th
+        XCTAssertTrue(d.recordOpened("elf").bonusEarned)    // 6th
+        XCTAssertEqual(d.count("elf"), 6)
+        XCTAssertEqual(d.opened, 8)
+        XCTAssertEqual(d.lastOpened, "elf")
     }
 
     func testClassicCatsAreAlwaysOwned() {
