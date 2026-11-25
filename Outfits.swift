@@ -18,7 +18,8 @@ enum ArtShape {
 /// Where a part is drawn in the cat's layer order.
 enum ArtLayer { case bodyPattern, body, paw, headPattern, face, neck, top }
 /// Which part of the cat the design coordinates are pinned to (so outfits squish and lean with him).
-enum ArtAnchor { case head, body, pawL, pawR, box }
+/// `neck` follows the body (not the bobbing head), for collars and scarves.
+enum ArtAnchor { case head, neck, body, pawL, pawR, box }
 enum ArtClip { case head, body }
 
 struct ArtPart {
@@ -52,14 +53,14 @@ enum OutfitArt {
             ArtPart(.paw, .pawR, .path([.m(105, 180), .q(107, 177.5, 109, 180), .q(111, 182.5, 113, 180), .q(115, 177.5, 117, 180)]), stroke: 0xFFFFFF, width: 2),
             ArtPart(.face, .head, .path([.m(50, 104), .q(52.5, 101, 55, 104), .q(57.5, 107, 60, 104), .q(62.5, 101, 65, 104)]), stroke: 0xFFFFFF, width: 2.2),
             ArtPart(.face, .head, .path([.m(135, 104), .q(137.5, 101, 140, 104), .q(142.5, 107, 145, 104), .q(147.5, 101, 150, 104)]), stroke: 0xFFFFFF, width: 2.2),
-            ArtPart(.neck, .head, .path([.m(100, 121), .l(87, 114), .l(87, 128), .z]), fill: 0xFFFFFF, stroke: 0xD9C9B5, width: 2),
-            ArtPart(.neck, .head, .path([.m(100, 121), .l(113, 114), .l(113, 128), .z]), fill: 0xFFFFFF, stroke: 0xD9C9B5, width: 2),
-            ArtPart(.neck, .head, .ellipse(100, 121, 4, 4), fill: 0xFFFFFF, stroke: 0xD9C9B5, width: 2),
+            ArtPart(.neck, .neck, .path([.m(100, 121), .l(87, 114), .l(87, 128), .z]), fill: 0xFFFFFF, stroke: 0xD9C9B5, width: 2),
+            ArtPart(.neck, .neck, .path([.m(100, 121), .l(113, 114), .l(113, 128), .z]), fill: 0xFFFFFF, stroke: 0xD9C9B5, width: 2),
+            ArtPart(.neck, .neck, .ellipse(100, 121, 4, 4), fill: 0xFFFFFF, stroke: 0xD9C9B5, width: 2),
         ]
         case "reindeer": return [
-            ArtPart(.neck, .head, .path([.m(72, 116), .q(100, 132, 128, 116)]), stroke: 0xC8323C, width: 6),
-            ArtPart(.neck, .head, .ellipse(100, 128, 6, 6), fill: 0xE9B949, stroke: 0xB8902A, width: 2),
-            ArtPart(.neck, .head, .path([.m(97.5, 130), .l(102.5, 130)]), stroke: 0x8A6A1E, width: 1.5),
+            ArtPart(.neck, .neck, .path([.m(72, 116), .q(100, 132, 128, 116)]), stroke: 0xC8323C, width: 6),
+            ArtPart(.neck, .neck, .ellipse(100, 128, 6, 6), fill: 0xE9B949, stroke: 0xB8902A, width: 2),
+            ArtPart(.neck, .neck, .path([.m(97.5, 130), .l(102.5, 130)]), stroke: 0x8A6A1E, width: 1.5),
             ArtPart(.top, .head, .path([.m(80, 42), .q(100, 30, 120, 42)]), stroke: 0x8A5A3B, width: 4),
             ArtPart(.top, .head, .path([.m(88, 37), .l(84, 14), .m(85, 23), .l(76, 17), .m(86, 30), .l(94, 22)]), stroke: 0xB9875A, width: 6),
             ArtPart(.top, .head, .path([.m(112, 37), .l(116, 14), .m(115, 23), .l(124, 17), .m(114, 30), .l(106, 22)]), stroke: 0xB9875A, width: 6),
@@ -69,20 +70,20 @@ enum OutfitArt {
             ArtPart(.bodyPattern, .body, .path([.m(122, 168), .q(138, 152, 150, 144), .q(152, 172, 134, 186), .z]), fill: 0x3A3438, clip: .body),
             ArtPart(.headPattern, .head, .path([.m(36, 60), .q(58, 32, 88, 42), .q(84, 70, 42, 82), .z]), fill: 0xE8964A, clip: .head),
             ArtPart(.headPattern, .head, .path([.m(114, 40), .q(150, 38, 164, 70), .q(140, 80, 116, 62), .z]), fill: 0x3A3438, clip: .head),
-            ArtPart(.neck, .head, .path([.m(112, 124), .l(120, 152), .l(130, 148), .l(122, 122), .z]), fill: 0xD9433F, stroke: 0xB0302D, width: 1.5),
-            ArtPart(.neck, .head, .path([.m(116, 138), .l(126, 135)]), stroke: 0xFFFFFF, width: 3),
-            ArtPart(.neck, .head, .path([.m(70, 116), .q(100, 134, 130, 116)]), stroke: 0xD9433F, width: 9),
-            ArtPart(.neck, .head, .path([.m(82, 121), .l(83, 129), .m(100, 124), .l(100, 132), .m(118, 121), .l(117, 129)]), stroke: 0xFFFFFF, width: 3),
+            ArtPart(.neck, .neck, .path([.m(112, 124), .l(120, 152), .l(130, 148), .l(122, 122), .z]), fill: 0xD9433F, stroke: 0xB0302D, width: 1.5),
+            ArtPart(.neck, .neck, .path([.m(116, 138), .l(126, 135)]), stroke: 0xFFFFFF, width: 3),
+            ArtPart(.neck, .neck, .path([.m(70, 116), .q(100, 134, 130, 116)]), stroke: 0xD9433F, width: 9),
+            ArtPart(.neck, .neck, .path([.m(82, 121), .l(83, 129), .m(100, 124), .l(100, 132), .m(118, 121), .l(117, 129)]), stroke: 0xFFFFFF, width: 3),
             ArtPart(.top, .head, .path([.m(80, 40), .q(100, 30, 122, 38), .l(112, 2), .z]), fill: 0x3E8E4F, stroke: 0x2A5E37, width: 2.5),
             ArtPart(.top, .head, .path([.m(78, 42), .q(100, 32, 124, 40)]), stroke: 0xFFFFFF, width: 7),
             ArtPart(.top, .head, .ellipse(112, 3, 5, 5), fill: 0xE9B949, stroke: 0xB8902A, width: 2),
         ]
         case "frost": return [
             ArtPart(.face, .head, .path([.m(46, 72), .q(56, 46, 98, 39)]), stroke: 0xFFFFFF, width: 3.5, opacity: 0.8),
-            ArtPart(.neck, .head, .path([.m(80, 124), .l(74, 152), .l(86, 154), .l(90, 126), .z]), fill: 0x8FD9C0, stroke: 0x5FAE95, width: 1.5),
-            ArtPart(.neck, .head, .path([.m(76, 146), .l(86, 148)]), stroke: 0x5FAE95, width: 2),
-            ArtPart(.neck, .head, .path([.m(70, 116), .q(100, 134, 130, 116)]), stroke: 0x8FD9C0, width: 10),
-            ArtPart(.neck, .head, .path([.m(70, 116), .q(100, 134, 130, 116)]), stroke: 0x5FAE95, width: 2, dash: [3, 4], butt: true),
+            ArtPart(.neck, .neck, .path([.m(80, 124), .l(74, 152), .l(86, 154), .l(90, 126), .z]), fill: 0x8FD9C0, stroke: 0x5FAE95, width: 1.5),
+            ArtPart(.neck, .neck, .path([.m(76, 146), .l(86, 148)]), stroke: 0x5FAE95, width: 2),
+            ArtPart(.neck, .neck, .path([.m(70, 116), .q(100, 134, 130, 116)]), stroke: 0x8FD9C0, width: 10),
+            ArtPart(.neck, .neck, .path([.m(70, 116), .q(100, 134, 130, 116)]), stroke: 0x5FAE95, width: 2, dash: [3, 4], butt: true),
             ArtPart(.paw, .pawL, .ellipse(87, 182, 14, 9), fill: 0xFFFFFF, stroke: 0xC9D2E2, width: 2.5),
             ArtPart(.paw, .pawR, .ellipse(113, 182, 14, 9), fill: 0xFFFFFF, stroke: 0xC9D2E2, width: 2.5),
             ArtPart(.paw, .pawL, .path([.m(74, 177), .q(87, 170, 100, 177)]), stroke: 0x8FD9C0, width: 4.5),
@@ -94,12 +95,12 @@ enum OutfitArt {
             ArtPart(.body, .body, .ellipse(76, 166, 2.4, 2.4), fill: 0xF3E3C8),
             ArtPart(.body, .body, .ellipse(100, 168, 2.4, 2.4), fill: 0xF3E3C8),
             ArtPart(.body, .body, .ellipse(124, 166, 2.4, 2.4), fill: 0xF3E3C8),
-            ArtPart(.neck, .head, .path([.m(74, 114), .q(100, 128, 126, 114)]), stroke: 0xF3E3C8, width: 6),
+            ArtPart(.neck, .neck, .path([.m(74, 114), .q(100, 128, 126, 114)]), stroke: 0xF3E3C8, width: 6),
         ]
         case "midnight": return [
-            ArtPart(.neck, .head, .path([.m(72, 116), .q(100, 132, 128, 116)]), stroke: 0xE9B949, width: 5),
-            ArtPart(.neck, .head, .ellipse(100, 128, 6, 6), fill: 0xFFD166, stroke: 0xC99A2E, width: 2),
-            ArtPart(.neck, .head, .path([.m(97.5, 130), .l(102.5, 130)]), stroke: 0x8A6A1E, width: 1.5),
+            ArtPart(.neck, .neck, .path([.m(72, 116), .q(100, 132, 128, 116)]), stroke: 0xE9B949, width: 5),
+            ArtPart(.neck, .neck, .ellipse(100, 128, 6, 6), fill: 0xFFD166, stroke: 0xC99A2E, width: 2),
+            ArtPart(.neck, .neck, .path([.m(97.5, 130), .l(102.5, 130)]), stroke: 0x8A6A1E, width: 1.5),
             ArtPart(.top, .head, .path([.m(84, 40), .q(100, 33, 116, 40)]), stroke: 0xE9B949, width: 4),
             ArtPart(.top, .head, .path([.m(100, 15), .l(102.7, 22.3), .l(110.5, 22.6), .l(104.4, 27.4), .l(106.5, 34.9), .l(100, 30.6), .l(93.5, 34.9), .l(95.6, 27.4), .l(89.5, 22.6), .l(97.3, 22.3), .z]), fill: 0xFFD166, stroke: 0xE0A82E, width: 1.5),
         ]

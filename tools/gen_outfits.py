@@ -78,7 +78,8 @@ enum ArtShape {
 /// Where a part is drawn in the cat's layer order.
 enum ArtLayer { case bodyPattern, body, paw, headPattern, face, neck, top }
 /// Which part of the cat the design coordinates are pinned to (so outfits squish and lean with him).
-enum ArtAnchor { case head, body, pawL, pawR, box }
+/// `neck` follows the body (not the bobbing head), for collars and scarves.
+enum ArtAnchor { case head, neck, body, pawL, pawR, box }
 enum ArtClip { case head, body }
 
 struct ArtPart {

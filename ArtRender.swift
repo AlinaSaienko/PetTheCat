@@ -14,6 +14,12 @@ enum ArtRender {
             let kx = g.r / 60, ky = (g.ryT + g.ryB) / 86
             let top = g.hy - g.ryT
             return ({ x, y in CGPoint(x: g.hx + (x - 100) * kx, y: top + (y - 36) * ky) }, kx, ky)
+        case .neck:
+            // collars and scarves: sized like the head, but pinned to the body where the chin
+            // rests when he's still, so they stay put while the head bobs and leans
+            let kx = g.r / 60, ky = (g.ryT + g.ryB) / 86
+            let chin = (g.by - g.bRY) + g.bRY * 0.42
+            return ({ x, y in CGPoint(x: g.bx + (x - 100) * kx, y: chin + (y - 122) * ky) }, kx, ky)
         case .body:
             // design body: x 52…148, y 113…186
             let kx = g.bRX / 48, ky = 2 * g.bRY / 73
