@@ -33,6 +33,7 @@ struct ContentView: View {
     @State private var opening = false
     @State private var showCollection = false
     @State private var showOdds = false
+    @State private var themeOpen = false
 
     private let timer = Timer.publish(every: 1.0 / 60.0, on: .main, in: .common).autoconnect()
     private let ink = Color(red: 0.28, green: 0.20, blue: 0.17)
@@ -103,6 +104,18 @@ struct ContentView: View {
                     breedPicker
                 }
 
+                if themeOpen {
+                    // tap anywhere else to close
+                    Color.black.opacity(0.001).ignoresSafeArea()
+                        .onTapGesture { themeOpen = false }
+                        .zIndex(2)
+                    ThemePanel(open: $themeOpen)
+                        .padding(.leading, 18)
+                        .padding(.top, 8 + 48 + 12 + 48 + 8)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                        .transition(.opacity.combined(with: .scale(scale: 0.92, anchor: .topLeading)))
+                        .zIndex(3)
+                }
                 if showPopup {
                     BoxPopupView(store: store,
                                  onOpen: { showPopup = false; opening = true },
@@ -113,6 +126,7 @@ struct ContentView: View {
                 }
             }
             .animation(.easeInOut(duration: 0.2), value: showPopup)
+            .animation(.easeOut(duration: 0.15), value: themeOpen)
         }
         .onReceive(timer) { _ in tick() }
         .onAppear { checkBoxes() }
@@ -150,7 +164,7 @@ struct ContentView: View {
                 }
                 .accessibilityLabel("My cats")
 
-                ThemeMenuButton()
+                ThemeMenuButton(open: $themeOpen)
             }
 
             Spacer()
@@ -361,29 +375,15 @@ struct ContentView: View {
 
 // MARK: - Appearance menu
 
-/// Light / Dark / System, remembered between launches.
-/// Its own view with no inputs, so the cat's 60 fps redraw doesn't rebuild the open menu
-/// (that was swallowing taps on its options).
+/// Round button under "My cats"; opens the appearance panel.
+/// (A system Menu here lost taps on some phones because the cat redraws 60 times a second.)
 struct ThemeMenuButton: View {
+    @Binding var open: Bool
     @AppStorage(ThemeMode.key) private var themeRaw = ThemeMode.system.rawValue
-
     private var mode: ThemeMode { ThemeMode(rawValue: themeRaw) ?? .system }
 
     var body: some View {
-        Menu {
-            ForEach(ThemeMode.allCases) { m in
-                Button {
-                    themeRaw = m.rawValue
-                    m.apply()
-                } label: {
-                    if m == mode {
-                        Label(m.title, systemImage: "checkmark")
-                    } else {
-                        Label(m.title, systemImage: m.icon)
-                    }
-                }
-            }
-        } label: {
+        Button { open.toggle() } label: {
             Image(systemName: mode.icon)
                 .font(.system(size: 19, weight: .semibold))
                 .foregroundColor(Palette.hint)
@@ -392,5 +392,43 @@ struct ThemeMenuButton: View {
         }
         .accessibilityLabel("Appearance: " + mode.title)
         .onAppear { mode.apply() }
+    }
+}
+
+/// System / Light / Dark, remembered between launches.
+struct ThemePanel: View {
+    @Binding var open: Bool
+    @AppStorage(ThemeMode.key) private var themeRaw = ThemeMode.system.rawValue
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(ThemeMode.allCases) { m in
+                Button {
+                    themeRaw = m.rawValue
+                    m.apply()
+                    open = false
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: m.icon).frame(width: 22)
+                        Text(m.title).font(.system(size: 17, design: .rounded))
+                        Spacer(minLength: 16)
+                        if m.rawValue == themeRaw {
+                            Image(systemName: "checkmark").font(.system(size: 15, weight: .bold))
+                        }
+                    }
+                    .foregroundColor(Palette.chipInk)
+                    .padding(.horizontal, 16)
+                    .frame(height: 48)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(m.rawValue == themeRaw ? .isSelected : [])
+                if m != ThemeMode.allCases.last { Divider().padding(.leading, 50) }
+            }
+        }
+        .frame(width: 200)
+        .background(RoundedRectangle(cornerRadius: 16).fill(Palette.chip))
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(Palette.chipInk.opacity(0.08), lineWidth: 1))
+        .shadow(color: .black.opacity(0.18), radius: 14, y: 6)
     }
 }
