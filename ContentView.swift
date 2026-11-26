@@ -33,7 +33,6 @@ struct ContentView: View {
     @State private var opening = false
     @State private var showCollection = false
     @State private var showOdds = false
-    @AppStorage(ThemeMode.key) private var themeRaw = ThemeMode.system.rawValue
 
     private let timer = Timer.publish(every: 1.0 / 60.0, on: .main, in: .common).autoconnect()
     private let ink = Color(red: 0.28, green: 0.20, blue: 0.17)
@@ -116,8 +115,6 @@ struct ContentView: View {
             .animation(.easeInOut(duration: 0.2), value: showPopup)
         }
         .onReceive(timer) { _ in tick() }
-        .onAppear { (ThemeMode(rawValue: themeRaw) ?? .system).apply() }
-        .onChange(of: themeRaw) { t in (ThemeMode(rawValue: t) ?? .system).apply() }
         .onAppear { checkBoxes() }
         .onChange(of: scenePhase) { p in
             if p == .active { checkBoxes() }
@@ -153,7 +150,7 @@ struct ContentView: View {
                 }
                 .accessibilityLabel("My cats")
 
-                themeButton
+                ThemeMenuButton()
             }
 
             Spacer()
@@ -169,31 +166,6 @@ struct ContentView: View {
         }
         .padding(.horizontal, 18)
         .padding(.top, 8)
-    }
-
-    /// Light / Dark / System, remembered between launches
-    private var themeButton: some View {
-        Menu {
-            ForEach(ThemeMode.allCases) { m in
-                Button {
-                    themeRaw = m.rawValue
-                    m.apply()
-                } label: {
-                    if m.rawValue == themeRaw {
-                        Label(m.title, systemImage: "checkmark")
-                    } else {
-                        Label(m.title, systemImage: m.icon)
-                    }
-                }
-            }
-        } label: {
-            Image(systemName: (ThemeMode(rawValue: themeRaw) ?? .system).icon)
-                .font(.system(size: 19, weight: .semibold))
-                .foregroundColor(Palette.hint)
-                .frame(width: 48, height: 48)
-                .background(Circle().fill(Palette.chip))
-        }
-        .accessibilityLabel("Appearance: " + (ThemeMode(rawValue: themeRaw) ?? .system).title)
     }
 
     private var giftButton: some View {
@@ -384,4 +356,41 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+}
+
+
+// MARK: - Appearance menu
+
+/// Light / Dark / System, remembered between launches.
+/// Its own view with no inputs, so the cat's 60 fps redraw doesn't rebuild the open menu
+/// (that was swallowing taps on its options).
+struct ThemeMenuButton: View {
+    @AppStorage(ThemeMode.key) private var themeRaw = ThemeMode.system.rawValue
+
+    private var mode: ThemeMode { ThemeMode(rawValue: themeRaw) ?? .system }
+
+    var body: some View {
+        Menu {
+            ForEach(ThemeMode.allCases) { m in
+                Button {
+                    themeRaw = m.rawValue
+                    m.apply()
+                } label: {
+                    if m == mode {
+                        Label(m.title, systemImage: "checkmark")
+                    } else {
+                        Label(m.title, systemImage: m.icon)
+                    }
+                }
+            }
+        } label: {
+            Image(systemName: mode.icon)
+                .font(.system(size: 19, weight: .semibold))
+                .foregroundColor(Palette.hint)
+                .frame(width: 48, height: 48)
+                .background(Circle().fill(Palette.chip))
+        }
+        .accessibilityLabel("Appearance: " + mode.title)
+        .onAppear { mode.apply() }
+    }
 }
